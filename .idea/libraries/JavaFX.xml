@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="JavaFX">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/JavaFX/javafx-sdk-12/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/JavaFX/javafx-sdk-12/bin" />
+    </NATIVE>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/JavaFX/javafx-sdk-12/lib" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/JavaFX/javafx-sdk-12/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/JavaFX/javafx-sdk-12/lib" recursive="false" type="SOURCES" />
+  </library>
+</component>
