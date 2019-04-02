@@ -1,4 +1,4 @@
-package com.github.PavelKisliuk.module.data.entity.ships;
+package com.github.PavelKisliuk.module.data.ships;
 
 /**
  * @author dzmitryplatonov on 2019-04-02.

@@ -1,4 +1,4 @@
-package com.github.PavelKisliuk.module.data.entity.area;
+package com.github.PavelKisliuk.module.data.area;
 
 /**
  * @author dzmitryplatonov on 2019-04-02.

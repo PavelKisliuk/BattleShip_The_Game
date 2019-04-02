@@ -1,4 +1,4 @@
-package com.github.PavelKisliuk.module.data.entity.ships;
+package com.github.PavelKisliuk.module.data.ships;
 
 public class Ship {
 	private int health;
