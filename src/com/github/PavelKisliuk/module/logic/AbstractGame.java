@@ -12,4 +12,8 @@ public abstract class AbstractGame {
 	{
 
 	}
+
+	public enum Way {
+		NORTH, EAST, SOUTH, WEST
+	}
 }
