@@ -14,7 +14,9 @@ public class Area {
 		EMPTY, SHIP, NEIGHBOR, BEATEN, MISS
 	}
 
-
+	/**
+	 * Default constructor for test
+	 */
 	public Area() {
 		area = new CellsType[][]{{CellsType.EMPTY, CellsType.SHIP, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.SHIP, CellsType.SHIP, CellsType.EMPTY},
 								{CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY, CellsType.EMPTY},
