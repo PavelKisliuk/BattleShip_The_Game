@@ -78,7 +78,6 @@ public class Area {
 
 			for (int j = 0; j < ship.getHealth(); j++) {
 				this.area[ship.getRow()[j]][ship.getColumn()[j]] = SHIP;
-				//setCell(ship.getRow()[j], ship.getColumn()[j], SHIP);
 			}
 		}
 	}
