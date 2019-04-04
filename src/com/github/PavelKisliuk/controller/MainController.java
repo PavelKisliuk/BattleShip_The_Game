@@ -58,6 +58,8 @@ public class MainController {
 				image.setDisable(false);
 			}
 		}
+		opponentGridPane.setGridLinesVisible(true);
+		playerGridPane.setGridLinesVisible(true);
 		opponentGridPane.setDisable(false);
 	}
 

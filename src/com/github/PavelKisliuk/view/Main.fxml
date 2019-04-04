@@ -180,7 +180,7 @@
                   </VBox>
                </left>
                <center>
-                  <GridPane fx:id="playerGridPane" gridLinesVisible="true" BorderPane.alignment="CENTER">
+                  <GridPane fx:id="playerGridPane" BorderPane.alignment="CENTER">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" />
                       <ColumnConstraints hgrow="SOMETIMES" />
@@ -490,7 +490,7 @@
                   </VBox>
                </left>
                <center>
-                  <GridPane fx:id="opponentGridPane" disable="true" gridLinesVisible="true" BorderPane.alignment="CENTER">
+                  <GridPane fx:id="opponentGridPane" disable="true" BorderPane.alignment="CENTER">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" />
                         <ColumnConstraints hgrow="SOMETIMES" />
