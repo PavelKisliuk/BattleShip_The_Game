@@ -8,5 +8,6 @@ class CheckerTest {
 
 	@Test
 	void isRightArrangement() {
+
 	}
 }
