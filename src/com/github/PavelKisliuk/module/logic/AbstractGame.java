@@ -1,6 +1,6 @@
 package com.github.PavelKisliuk.module.logic;
 
-import com.github.PavelKisliuk.module.data.area.Area;
+import com.github.PavelKisliuk.module.data.Area;
 
 public abstract class AbstractGame {
 	public static void arrangement(Area area)

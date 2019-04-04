@@ -1,4 +1,4 @@
-package com.github.PavelKisliuk.module.data.area;
+package com.github.PavelKisliuk.module.data;
 
 import com.github.PavelKisliuk.module.data.Ship;
 
