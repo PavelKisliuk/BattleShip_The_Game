@@ -52,6 +52,7 @@ public class MainController {
 	@FXML
 	void initialize() {
 		startButton.setOnAction(actionEvent -> startButtonOnAction());
+		newGameButton.setOnAction(actionEvent -> newGameOnAction());
 	}
 
 	private void startButtonOnAction(){
@@ -59,11 +60,22 @@ public class MainController {
 			if(n instanceof ImageView) {
 				ImageView image = (ImageView) n;
 				image.setImage(COVERT);
-				image.setDisable(false);
 			}
 		}
 		opponentGridPane.setGridLinesVisible(true);
 		playerGridPane.setGridLinesVisible(true);
 		opponentGridPane.setDisable(false);
+	}
+
+	private void newGameOnAction(){
+		for(Node n : opponentGridPane.getChildren()) {
+			if(n instanceof ImageView) {
+				ImageView image = (ImageView) n;
+				image.setImage(null);
+			}
+		}
+		opponentGridPane.setGridLinesVisible(false);
+		playerGridPane.setGridLinesVisible(false);
+		opponentGridPane.setDisable(true);
 	}
 }
