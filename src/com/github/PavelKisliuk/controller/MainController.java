@@ -30,7 +30,9 @@ public class MainController {
 
 	@FXML
 	void imageViewsOnMouseClicked(MouseEvent event) {
-
+		ImageView image = (ImageView)event.getTarget();
+		image.setImage(null);
+		image.setDisable(true);
 	}
 
 	@FXML
@@ -42,7 +44,9 @@ public class MainController {
 	@FXML
 	void imageViewsOnMouseExited(MouseEvent event) {
 		ImageView image = (ImageView)event.getTarget();
-		image.setImage(COVERT);
+		if(image.getImage() != null) {
+			image.setImage(COVERT);
+		}
 	}
 
 	@FXML
@@ -62,5 +66,4 @@ public class MainController {
 		playerGridPane.setGridLinesVisible(true);
 		opponentGridPane.setDisable(false);
 	}
-
 }
