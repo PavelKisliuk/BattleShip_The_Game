@@ -58,6 +58,7 @@ public class MainController {
 				image.setDisable(false);
 			}
 		}
+		opponentGridPane.setDisable(false);
 	}
 
 }
