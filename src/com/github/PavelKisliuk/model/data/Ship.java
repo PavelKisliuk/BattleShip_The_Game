@@ -1,4 +1,4 @@
-package com.github.PavelKisliuk.module.data;
+package com.github.PavelKisliuk.model.data;
 
 import org.apache.log4j.Logger;
 

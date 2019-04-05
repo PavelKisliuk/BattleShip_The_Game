@@ -1,4 +1,4 @@
-package com.github.PavelKisliuk.module.data;
+package com.github.PavelKisliuk.model.data;
 
 /**
  * @author dzmitryplatonov on 2019-04-04.

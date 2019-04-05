@@ -1,6 +1,6 @@
-package com.github.PavelKisliuk.module.logic;
+package com.github.PavelKisliuk.model.logic;
 
-import com.github.PavelKisliuk.module.data.Area;
+import com.github.PavelKisliuk.model.data.Area;
 
 public abstract class AbstractGame {
 	public enum Way {

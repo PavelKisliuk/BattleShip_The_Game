@@ -1,8 +1,8 @@
-package com.github.PavelKisliuk.module.data;
+package com.github.PavelKisliuk.model.data;
 
 import java.util.Arrays;
 
-import static com.github.PavelKisliuk.module.data.Area.CellsType.*;
+import static com.github.PavelKisliuk.model.data.Area.CellsType.*;
 
 public class Area {
     public static final int SHIPS_AMOUNT = 10;

@@ -1,8 +1,6 @@
-package com.github.PavelKisliuk.module.logic;
+package com.github.PavelKisliuk.model.logic;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractGameTest {
 

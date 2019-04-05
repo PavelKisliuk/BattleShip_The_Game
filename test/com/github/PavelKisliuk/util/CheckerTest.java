@@ -1,7 +1,7 @@
 package com.github.PavelKisliuk.util;
 
-import com.github.PavelKisliuk.module.data.Area;
-import com.github.PavelKisliuk.module.data.Ship;
+import com.github.PavelKisliuk.model.data.Area;
+import com.github.PavelKisliuk.model.data.Ship;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
