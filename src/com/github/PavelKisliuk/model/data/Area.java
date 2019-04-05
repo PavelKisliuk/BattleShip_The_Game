@@ -2,12 +2,11 @@ package com.github.PavelKisliuk.model.data;
 
 import java.util.Arrays;
 
-import static com.github.PavelKisliuk.model.data.Area.CellsType.*;
 
 public class Area {
     public static final int SHIPS_AMOUNT = 10;
     public static final int AREA_SIZE = 10;
-    private static final CellsType DEFAULT_CELLS_TYPE = EMPTY;
+    private static final CellsType DEFAULT_CELLS_TYPE = CellsType.EMPTY;
 
     private CellsType[][] cellsTypes;
     private Ship[] ships;
@@ -47,7 +46,7 @@ public class Area {
         for (Ship ship : ships) {
 
             for (int j = 0; j < ship.getHealth(); j++) {
-                this.cellsTypes[ship.getRow()[j]][ship.getColumn()[j]] = SHIP;
+                this.cellsTypes[ship.getRow()[j]][ship.getColumn()[j]] = CellsType.SHIP;
             }
         }
     }
@@ -88,7 +87,7 @@ public class Area {
         for (Ship ship : ships) {
 
             for (int j = 0; j < ship.getHealth(); j++) {
-                this.cellsTypes[ship.getRow()[j]][ship.getColumn()[j]] = SHIP;
+                this.cellsTypes[ship.getRow()[j]][ship.getColumn()[j]] = CellsType.SHIP;
             }
         }
     }
@@ -102,7 +101,7 @@ public class Area {
         for (Ship ship : ships) {
 
             for (int j = 0; j < ship.getHealth(); j++) {
-                this.cellsTypes[ship.getRow()[j]][ship.getColumn()[j]] = SHIP;
+                this.cellsTypes[ship.getRow()[j]][ship.getColumn()[j]] = CellsType.SHIP;
             }
         }
     }
