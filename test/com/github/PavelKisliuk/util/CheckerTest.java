@@ -104,7 +104,6 @@ class CheckerTest {
 				new Ship(1, new int[]{0}, new int[]{1}),
 				new Ship(1, new int[]{2}, new int[]{4}),
 				new Ship(1, new int[]{8}, new int[]{8})});
-		//area1.setCellsTypes(area.getShips());
 		assertFalse(Checker.checkShips(area1));
 		Area area2 = new Area(10,10);
 		area2.setShips(new Ship[]{});
@@ -121,7 +120,6 @@ class CheckerTest {
 				new Ship(1, new int[]{2}, new int[]{4}),
 				new Ship(1, new int[]{4}, new int[]{8}),
 				new Ship(1, new int[]{8}, new int[]{8})});
-		//area3.setCellsTypes(area3.getShips());
 		assertFalse(Checker.checkShips(area3));
 	}
 }
