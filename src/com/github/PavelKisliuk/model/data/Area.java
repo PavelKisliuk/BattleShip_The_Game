@@ -6,7 +6,7 @@ import static com.github.PavelKisliuk.model.data.Area.CellsType.*;
 
 public class Area {
     public static final int SHIPS_AMOUNT = 10;
-    public static  int AREA_SIZE = 10;
+    public static final int AREA_SIZE = 10;
     private static final CellsType DEFAULT_CELLS_TYPE = EMPTY;
 
     private CellsType[][] cellsTypes;
