@@ -29,11 +29,16 @@ public class Checker {
                 for (int j = 0; j < area.width(); j++) {
                     if (area.getCell(i, j) == null || area.getCell(i, j) == Area.CellsType.BEATEN
                             || area.getCell(i, j) == Area.CellsType.MISS || area.getCell(i, j) == Area.CellsType.NEIGHBOR) {
-                        logger.debug("Not Empty/Ship cell detected");
+                        logger.debug("Cell is null or unexpected type");
                         result = false;
                         break;
                     }
                 }
+            }
+
+            if (!checkShips(area)) {
+                logger.debug("Ships check failed");
+                result = false;
             }
 
             for (int i = 0; i < area.getShips().length; i++) {
@@ -44,10 +49,6 @@ public class Checker {
                 }
             }
 
-            if (!checkShips(area)) {
-                logger.debug("Ships check failed");
-                result = false;
-            }
         }
 
 
