@@ -53,10 +53,6 @@ public class Ship {
 		return row;
 	}
 
-	public int getRow(int index) {
-		return row[index];
-	}
-
 	public void setRow(int[] row) {
 		if (row == null || row.length <= 0 || row.length > Area.AREA_SIZE) {
 			throw new ShipInitializationException("Illegal row parameter");
@@ -66,10 +62,6 @@ public class Ship {
 
 	public int[] getColumn() {
 		return column;
-	}
-
-	public int getColumn(int index) {
-		return column[index];
 	}
 
 	public void setColumn(int[] column) {
