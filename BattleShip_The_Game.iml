@@ -23,5 +23,6 @@
     <orderEntry type="library" name="JavaFX" level="project" />
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="log4j" level="project" />
+    <orderEntry type="library" name="log4j:apache-log4j-extras:1.2.17" level="project" />
   </component>
 </module>

@@ -1,5 +1,6 @@
 package com.github.PavelKisliuk.model.data;
 
+import com.github.PavelKisliuk.util.exception.ShipInitializationException;
 import org.apache.log4j.Logger;
 
 public class Ship {
@@ -9,6 +10,11 @@ public class Ship {
 	static {
 		logger = Logger.getLogger(Ship.class);
 	}
+
+	public static final int ONE_CELL_SHIP_HEALTH = 1;
+	public static final int TWO_CELL_SHIP_HEALTH = 2;
+	public static final int THREE_CELL_SHIP_HEALTH = 3;
+	public static final int FOUR_CELL_SHIP_HEALTH = 4;
 
 
 	private int health;
@@ -24,9 +30,6 @@ public class Ship {
 	 */
 	public Ship(int health, int[] row, int[] column)
 	{
-		if (health <= 0 || row.length <= 0 || column.length <= 0) {
-			throw new ShipInitializationException("Not correct input data");
-		}
 		this.health = health;
 		this.row = new int[health];
 		this.column = new  int[health];
@@ -34,6 +37,12 @@ public class Ship {
 			this.row[i] = row[i];
 			this.column[i] = column[i];
 		}
+	}
+
+	public Ship() {
+		this.health = ONE_CELL_SHIP_HEALTH;
+		this.row = new int[health];
+		this.column = new  int[health];
 	}
 
 	public int getHealth() {
@@ -56,6 +65,7 @@ public class Ship {
 			throw new ShipInitializationException("Illegal row parameter");
 		}
 		this.row = row;
+		System.arraycopy(row, 0, this.row,0, row.length);
 	}
 
 	public int[] getColumn() {
@@ -67,5 +77,16 @@ public class Ship {
 			throw new ShipInitializationException("Illegal column parameter");
 		}
 		this.column = column;
+		System.arraycopy(column, 0, this.column,0, column.length);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Ship{");
+		for (int i = 0; i < getHealth(); i++) {
+			builder.append("(").append(getRow()[i]).append(",").append(getColumn()[i]).append(")");
+		}
+		return builder.append("}").toString();
 	}
 }
