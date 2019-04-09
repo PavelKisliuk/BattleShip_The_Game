@@ -18,4 +18,12 @@ public enum  Creator {
     public Area createArea() {
         return new Area();
     }
+
+    public int[] getIntArray(Integer[] ar) {
+        int[] newAr = new int[ar.length];
+        for(int i = 0; i < ar.length; i++) {
+            newAr[i] = ar[i];
+        }
+        return newAr;
+    }
 }
