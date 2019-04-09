@@ -23,7 +23,7 @@ public class Area {
                 cellsTypes[i][j] = DEFAULT_CELLS_TYPE;
             }
         }
-        ships = new Ship[SHIPS_AMOUNT];
+        ships = new Ship[0];
     }
 
     public Area(int length, int width) {
@@ -106,6 +106,14 @@ public class Area {
         }
     }
 
+    public void addShip(Ship ship) {
+        for (int i = 0; i < ship.getHealth(); i++) {
+            this.cellsTypes[ship.getRow()[i]][ship.getColumn()[i]] = CellsType.SHIP;
+        }
+        ships = Arrays.copyOf(ships, ships.length + 1);
+        ships[ships.length - 1] = ship;
+    }
+
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
@@ -113,8 +121,12 @@ public class Area {
             for(int j = 0; j < cellsTypes[0].length; j++) {
                 if(cellsTypes[i][j] == CellsType.EMPTY) {
                     str.append(". ");
-                } else {
+                } else if (cellsTypes[i][j] == CellsType.SHIP){
                     str.append("* ");
+                } else if (cellsTypes[i][j] == CellsType.NEIGHBOR) {
+                    str.append("/ ");
+                } else {
+                    str.append("@ ");
                 }
             }
             str.append("\n");

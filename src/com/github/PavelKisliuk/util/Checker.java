@@ -2,9 +2,12 @@ package com.github.PavelKisliuk.util;
 
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.data.Ship;
+import com.github.PavelKisliuk.util.exception.ShipHealthException;
 import org.apache.log4j.Logger;
 
-public class Checker {
+public enum  Checker {
+
+    INSTANCE;
 
     private static final Logger logger;
 
@@ -19,7 +22,7 @@ public class Checker {
     private static final int ONE_CELLS_SHIPS_AMOUNT = 4;
 
 
-    public static boolean isRightArrangement(Area area) {
+    public boolean isRightArrangement(Area area) {
         boolean result = true;
         if (area == null || area.length() != Area.AREA_SIZE || area.width() != Area.AREA_SIZE || area.getShips() == null) {
             logger.debug("Incorrect input data received");
@@ -27,9 +30,13 @@ public class Checker {
         } else {
             for (int i = 0; i < area.length(); i++) {
                 for (int j = 0; j < area.width(); j++) {
-                    if (area.getCell(i, j) == null || area.getCell(i, j) == Area.CellsType.BEATEN
-                            || area.getCell(i, j) == Area.CellsType.MISS || area.getCell(i, j) == Area.CellsType.NEIGHBOR) {
-                        logger.debug("Cell is null or unexpected type");
+                    if (area.getCell(i, j) == null) {
+                        logger.debug("Cell is null");
+                        result = false;
+                        break;
+                    }
+                    if (area.getCell(i, j) == Area.CellsType.BEATEN || area.getCell(i, j) == Area.CellsType.MISS) {
+                        logger.debug("Unexpected type of Cell detected");
                         result = false;
                         break;
                     }
@@ -55,197 +62,197 @@ public class Checker {
         return result;
     }
 
-    static boolean checkNeighbor(Area area, Ship ship) {
+    boolean checkNeighbor(Area area, Ship ship) {
         area = ringAreaWithEmpty(area);
         switch (ship.getHealth()) {
             case 1:
 
-                return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY;
+                return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                        && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP;
 
             case 2:
 
                 if (ship.getRow()[0] == ship.getRow()[1]) {
-                    return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
+                    return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY;
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP;
 
                 } else {
                     return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY;
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP;
 
                 }
             case 3:
 
                 if (ship.getRow()[0] == ship.getRow()[1]) {
-                    return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
+                    return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY;
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP;
 
                 } else {
 
                     return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY;
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP;
 
                 }
             case 4:
 
                 if (ship.getRow()[0] == ship.getRow()[1]) {
-                    return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
+                    return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT, ship.getColumn()[3] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT, ship.getColumn()[3] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[3] + INSERTION_SHIFT, ship.getColumn()[3] + INSERTION_SHIFT - 1) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY;
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP;
 
                 } else {
 
                     return area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT - 1, ship.getColumn()[0] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[0] + INSERTION_SHIFT + 1, ship.getColumn()[0] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT - 1, ship.getColumn()[1] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[1] + INSERTION_SHIFT + 1, ship.getColumn()[1] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
                             && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT) == Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT - 1, ship.getColumn()[2] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[2] + INSERTION_SHIFT + 1, ship.getColumn()[2] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
 
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT) == Area.CellsType.EMPTY
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT) != Area.CellsType.SHIP
                             && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT) == Area.CellsType.SHIP
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT, ship.getColumn()[3] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT, ship.getColumn()[3] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT + 1) == Area.CellsType.EMPTY
-                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT - 1) == Area.CellsType.EMPTY;
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT, ship.getColumn()[3] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT, ship.getColumn()[3] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT - 1, ship.getColumn()[3] + INSERTION_SHIFT + 1) != Area.CellsType.SHIP
+                            && area.getCell(ship.getRow()[3] + INSERTION_SHIFT + 1, ship.getColumn()[3] + INSERTION_SHIFT - 1) != Area.CellsType.SHIP;
 
                 }
 
@@ -255,13 +262,13 @@ public class Checker {
 
     }
 
-     static Area ringAreaWithEmpty(Area area) {
+    Area ringAreaWithEmpty(Area area) {
         Area resultArea = new Area(area.length() + 2, area.width() + 2);
-        Checker.insertSmallerArea(resultArea, 1, 1, area);
+        insertSmallerArea(resultArea, 1, 1, area);
         return resultArea;
     }
 
-    private static void insertSmallerArea(Area area, int leftTopCornerI, int leftTopCornerJ, Area smallerArea) {
+    private void insertSmallerArea(Area area, int leftTopCornerI, int leftTopCornerJ, Area smallerArea) {
         if (smallerArea.length() + leftTopCornerI > area.length()
                 || smallerArea.width() + leftTopCornerJ > area.width()) {
             throw new IllegalArgumentException("Illegal argument, can't insert matrix ");
@@ -273,7 +280,7 @@ public class Checker {
         }
     }
 
-    static boolean checkShips(Area area) {
+    boolean checkShips(Area area) {
         int counterOneCellShip = ONE_CELLS_SHIPS_AMOUNT;
         int counterTwoCellShip = TWO_CELLS_SHIPS_AMOUNT;
         int counterThreeCellShip = THREE_CELLS_SHIPS_AMOUNT;

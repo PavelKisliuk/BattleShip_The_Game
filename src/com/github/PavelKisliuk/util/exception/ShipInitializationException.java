@@ -1,4 +1,4 @@
-package com.github.PavelKisliuk.model.data;
+package com.github.PavelKisliuk.util.exception;
 
 /**
  * @author dzmitryplatonov on 2019-04-04.
