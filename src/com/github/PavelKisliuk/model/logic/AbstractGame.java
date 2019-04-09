@@ -12,7 +12,7 @@ public abstract class AbstractGame {
 
 	}
 
-	public static void arrangement(Area area, int[] row, int[] column)
+	public static void arrangement(Area main, Area complete)
 	{
 
 	}
