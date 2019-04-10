@@ -23,17 +23,17 @@ public class Ship {
 
 	/**
 	 * Parameterized constructor for creating {@param Ship}
+	 *
 	 * @param health is points of health of ship
 	 *               if {@param health} == 0 Ship is dead
-	 * @param row is array contain places in matrix by row where reside Ship
+	 * @param row    is array contain places in matrix by row where reside Ship
 	 * @param column is array contain places in matrix by column where reside Ship
 	 */
-	public Ship(int health, int[] row, int[] column)
-	{
+	public Ship(int health, int[] row, int[] column) {
 		this.health = health;
 		this.row = new int[health];
-		this.column = new  int[health];
-		for(int i = 0; i < health; i++) {
+		this.column = new int[health];
+		for (int i = 0; i < health; i++) {
 			this.row[i] = row[i];
 			this.column[i] = column[i];
 		}
@@ -42,7 +42,7 @@ public class Ship {
 	public Ship() {
 		this.health = ONE_CELL_SHIP_HEALTH;
 		this.row = new int[health];
-		this.column = new  int[health];
+		this.column = new int[health];
 	}
 
 	public int getHealth() {
@@ -50,7 +50,7 @@ public class Ship {
 	}
 
 	public void setHealth(int health) {
-		if (health <= 0 || health > Area.AREA_SIZE ) {
+		if (health <= 0 || health > Area.AREA_SIZE) {
 			throw new ShipInitializationException("Illegal health parameter");
 		}
 		this.health = health;
@@ -65,7 +65,7 @@ public class Ship {
 			throw new ShipInitializationException("Illegal row parameter");
 		}
 		this.row = row;
-		System.arraycopy(row, 0, this.row,0, row.length);
+		System.arraycopy(row, 0, this.row, 0, row.length);
 	}
 
 	public int[] getColumn() {
@@ -77,7 +77,7 @@ public class Ship {
 			throw new ShipInitializationException("Illegal column parameter");
 		}
 		this.column = column;
-		System.arraycopy(column, 0, this.column,0, column.length);
+		System.arraycopy(column, 0, this.column, 0, column.length);
 	}
 
 	@Override

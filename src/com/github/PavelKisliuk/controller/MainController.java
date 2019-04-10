@@ -47,21 +47,21 @@ public class MainController {
 
 	@FXML
 	void imageViewsOnMouseClicked(MouseEvent event) {
-		ImageView image = (ImageView)event.getTarget();
+		ImageView image = (ImageView) event.getTarget();
 		image.setImage(null);
 		image.setDisable(true);
 	}
 
 	@FXML
 	void imageViewsOnMouseEntered(MouseEvent event) {
-		ImageView image = (ImageView)event.getTarget();
+		ImageView image = (ImageView) event.getTarget();
 		image.setImage(POINTED);
 	}
 
 	@FXML
 	void imageViewsOnMouseExited(MouseEvent event) {
-		ImageView image = (ImageView)event.getTarget();
-		if(image.getImage() != null) {
+		ImageView image = (ImageView) event.getTarget();
+		if (image.getImage() != null) {
 			image.setImage(COVERT);
 		}
 	}
@@ -116,7 +116,7 @@ public class MainController {
 		String title = "Arrangement of ships";
 		openWindow(path, title);
 
-		if(!(ASWController.isCancel())) {
+		if (!(ASWController.isCancel())) {
 			playerArea = ASWController.getArea();
 
 			for (Node n : playerGridPane.getChildren()) {
@@ -150,16 +150,16 @@ public class MainController {
 		}
 	}
 
-	private void newGameOnAction(){
-		for(Node n : opponentGridPane.getChildren()) {
-			if(n instanceof ImageView) {
+	private void newGameOnAction() {
+		for (Node n : opponentGridPane.getChildren()) {
+			if (n instanceof ImageView) {
 				ImageView image = (ImageView) n;
 				image.setImage(null);
 			}
 		}
 
-		for(Node n : playerGridPane.getChildren()) {
-			if(n instanceof ImageView) {
+		for (Node n : playerGridPane.getChildren()) {
+			if (n instanceof ImageView) {
 				ImageView image = (ImageView) n;
 				image.setImage(null);
 			}
