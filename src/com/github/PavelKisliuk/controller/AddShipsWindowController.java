@@ -3,6 +3,7 @@ package com.github.PavelKisliuk.controller;
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.data.Ship;
 import com.github.PavelKisliuk.util.Creator;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -11,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,9 @@ public class AddShipsWindowController {
 	private int boxesCounter;
 	private List<Integer> rowsGroup;
 	private List<Integer> columnsGroup;
+
+	private Area area;
+	private boolean isCancel;
 
 	@FXML
 	private GridPane mainGridPane;
@@ -73,6 +78,8 @@ public class AddShipsWindowController {
 
 		if(boxesCounter > 0) {
 			shipAddedButton.setVisible(true);
+		} else {
+			shipAddedButton.setVisible(false);
 		}
 	}
 
@@ -95,32 +102,40 @@ public class AddShipsWindowController {
 	@FXML
 	void initialize() {
 		shipsGroup = new Ship[Area.SHIPS_AMOUNT];
-		rowsGroup = new ArrayList<>();
-		columnsGroup = new ArrayList<>();
+		isCancel = true;
 
 		addShipButton.setOnAction(actionEvent -> addShipButtonOnAction());
 		shipAddedButton.setOnAction(actionEvent -> shipAddedButtonOnAction());
+		discardButton.setOnAction(actionEvent -> discardButtonOnAction());
+		okButton.setOnAction(this::okButtonOnAction);
+		cancelButton.setOnAction(this::cancelButtonOnAction);
 	}
 
 	private void addShipButtonOnAction() {
 		addShipButton.setVisible(false);
 		mainGridPane.setDisable(false);
 		boxesCounter = 0;
+
+		rowsGroup = new ArrayList<>();
+		columnsGroup = new ArrayList<>();
 	}
 
 	private void shipAddedButtonOnAction() {
-		if (shipsCounter < Area.SHIPS_AMOUNT){
-			addShipButton.setVisible(true);
-		}
 		mainGridPane.setDisable(true);
 		shipAddedButton.setVisible(false);
 
 		shipsGroup[shipsCounter] = new Ship(rowsGroup.size(),
-				Creator.INSTANCE.getIntArray((Integer[]) rowsGroup.toArray()),
-				Creator.INSTANCE.getIntArray((Integer[]) columnsGroup.toArray()));
-		shipsCounter--;
+				Creator.getIntArray(rowsGroup),
+				Creator.getIntArray(columnsGroup));
 
 		setDisableChoicesBoxes();
+
+		shipsCounter++;
+		if (shipsCounter < Area.SHIPS_AMOUNT){
+			addShipButton.setVisible(true);
+		}
+
+		infoLabel.setText(String.format("%s%d%s", "Need to add ", (Area.SHIPS_AMOUNT - shipsCounter), " ships."));
 	}
 
 	private void setDisableChoicesBoxes() {
@@ -130,5 +145,45 @@ public class AddShipsWindowController {
 				node.setDisable(true);
 			}
 		}
+	}
+
+	private void discardButtonOnAction(){
+		shipsGroup = new Ship[Area.SHIPS_AMOUNT];
+		shipsCounter = 0;
+		boxesCounter = 0;
+		rowsGroup = null;
+		columnsGroup = null;
+
+		for(Node n : mainGridPane.getChildren()) {
+			if(n instanceof ImageView) {
+				ImageView image = (ImageView) n;
+				image.setImage(null);
+			}
+		}
+
+		addShipButton.setVisible(true);
+		shipAddedButton.setVisible(false);
+		mainGridPane.setDisable(true);
+		infoLabel.setText(String.format("%s%d%s", "Need to add ", (Area.SHIPS_AMOUNT - shipsCounter), " ships."));
+	}
+
+	private void okButtonOnAction(ActionEvent actionEvent) {
+
+
+		isCancel = false;
+		Node b = (Node) actionEvent.getTarget();
+		Stage stage = (Stage) b.getScene().getWindow();
+		stage.close();
+	}
+
+	private void cancelButtonOnAction(ActionEvent actionEvent) {
+		Node b = (Node) actionEvent.getTarget();
+		Stage stage = (Stage) b.getScene().getWindow();
+		stage.close();
+	}
+
+
+	public boolean isCancel() {
+		return isCancel;
 	}
 }

@@ -1,13 +1,20 @@
 package com.github.PavelKisliuk.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainController {
 	private final Image COVERT = new Image("com/github/PavelKisliuk/image/covert.jpg");
@@ -56,6 +63,37 @@ public class MainController {
 	}
 
 	private void startButtonOnAction(){
+		try {
+			//primaryStage adjustment
+			//-----------------------------------------------
+			Stage dialogueStage = new Stage();
+			dialogueStage.setResizable(false);
+			dialogueStage.sizeToScene();
+			dialogueStage.setTitle("Arrangement of ships");
+			dialogueStage.centerOnScreen();
+
+			//FXML adjustment
+			//-----------------------------------------------
+			FXMLLoader fxmlLoaderDialogue = new FXMLLoader();
+			fxmlLoaderDialogue.setLocation(getClass().getResource("/com/github/PavelKisliuk/view/AddShipsWindow.fxml"));
+			Parent fxmlDialogue = fxmlLoaderDialogue.load();
+
+			//modality adjustment
+			//-----------------------------------------------
+			dialogueStage.initModality(Modality.WINDOW_MODAL);
+			dialogueStage.initOwner(startButton.getScene().getWindow());
+
+			//start-up window
+			//-----------------------------------------------
+			Scene choice = new Scene(fxmlDialogue);
+			dialogueStage.setScene(choice);
+			dialogueStage.show();
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		for(Node n : opponentGridPane.getChildren()) {
 			if(n instanceof ImageView) {
 				ImageView image = (ImageView) n;
