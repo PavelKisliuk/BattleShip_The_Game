@@ -23,7 +23,7 @@ public class Area {
                 cellsTypes[i][j] = DEFAULT_CELLS_TYPE;
             }
         }
-        ships = new Ship[0];
+        ships = new Ship[SHIPS_AMOUNT];
     }
 
     public Area(int length, int width) {
