@@ -144,7 +144,7 @@ public class MainController {
 			startButton.setVisible(false);
 			goFirstCheckBox.setVisible(false);
 			newGameButton.setVisible(true);
-			gameInfoLabel.setText("Game start!");
+			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
 		} else {
 			gameInfoLabel.setText("Ships not arrange! Try again.");
 		}

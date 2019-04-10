@@ -126,6 +126,7 @@ public class AddShipsWindowController {
 		if (RandomAreaArranger.INSTANCE.arrangeRandomArea(area)) {
 			isCancel = false;
 			arrangementInfo = "Arrangement successful.";
+			AreaArranger.INSTANCE.changeCelltype(area, Area.CellsType.NEIGHBOR, Area.CellsType.EMPTY);
 			Node b = (Node) actionEvent.getTarget();
 			Stage stage = (Stage) b.getScene().getWindow();
 			stage.close();
@@ -205,6 +206,7 @@ public class AddShipsWindowController {
 			if (Checker.INSTANCE.isRightArrangement(area)) {
 				isCancel = false;
 				arrangementInfo = "Arrangement successful.";
+				AreaArranger.INSTANCE.changeCelltype(area, Area.CellsType.NEIGHBOR, Area.CellsType.EMPTY);
 				Node b = (Node) actionEvent.getTarget();
 				Stage stage = (Stage) b.getScene().getWindow();
 				stage.close();
