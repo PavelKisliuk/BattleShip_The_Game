@@ -262,6 +262,8 @@ public enum  Checker {
 
     }
 
+
+
     Area ringAreaWithEmpty(Area area) {
         Area resultArea = new Area(area.length() + 2, area.width() + 2);
         insertSmallerArea(resultArea, 1, 1, area);

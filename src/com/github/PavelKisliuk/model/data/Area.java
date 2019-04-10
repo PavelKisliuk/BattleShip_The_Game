@@ -1,9 +1,19 @@
 package com.github.PavelKisliuk.model.data;
 
+import org.apache.log4j.Logger;
+
 import java.util.Arrays;
 
 
 public class Area {
+
+    private static final Logger logger;
+
+    static {
+        logger = Logger.getLogger(Area.class);
+    }
+
+
     public static final int SHIPS_AMOUNT = 10;
     public static final int AREA_SIZE = 10;
     private static final CellsType DEFAULT_CELLS_TYPE = CellsType.EMPTY;
@@ -23,7 +33,7 @@ public class Area {
                 cellsTypes[i][j] = DEFAULT_CELLS_TYPE;
             }
         }
-        ships = new Ship[SHIPS_AMOUNT];
+        ships = new Ship[0];
     }
 
     public Area(int length, int width) {
@@ -115,13 +125,13 @@ public class Area {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder str = new StringBuilder();
-        for(int i = 0; i < cellsTypes.length; i++) {
-            for(int j = 0; j < cellsTypes[0].length; j++) {
-                if(cellsTypes[i][j] == CellsType.EMPTY) {
+        for (int i = 0; i < cellsTypes.length; i++) {
+            for (int j = 0; j < cellsTypes[0].length; j++) {
+                if (cellsTypes[i][j] == CellsType.EMPTY) {
                     str.append(". ");
-                } else if (cellsTypes[i][j] == CellsType.SHIP){
+                } else if (cellsTypes[i][j] == CellsType.SHIP) {
                     str.append("* ");
                 } else if (cellsTypes[i][j] == CellsType.NEIGHBOR) {
                     str.append("/ ");

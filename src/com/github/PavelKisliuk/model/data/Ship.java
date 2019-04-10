@@ -3,6 +3,9 @@ package com.github.PavelKisliuk.model.data;
 import com.github.PavelKisliuk.util.exception.ShipInitializationException;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Ship {
 
 	private static final Logger logger;
@@ -78,6 +81,24 @@ public class Ship {
 		}
 		this.column = column;
 		System.arraycopy(column, 0, this.column,0, column.length);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Ship ship = (Ship) o;
+		return health == ship.health &&
+				Arrays.equals(row, ship.row) &&
+				Arrays.equals(column, ship.column);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hash(health);
+		result = 31 * result + Arrays.hashCode(row);
+		result = 31 * result + Arrays.hashCode(column);
+		return result;
 	}
 
 	@Override

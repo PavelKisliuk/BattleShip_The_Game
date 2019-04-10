@@ -25,11 +25,13 @@ public enum AreaArranger {
 		}
 		for (Ship ship : ships) {
 			if (isSuited(area, ship)) {
-				area.setShips(ships);
+				arrangeShip(area, ship);
 				arrangeNeighbors(area);
-				logger.debug(ship + " arranged successfully");
+			} else {
+				logger.debug(ship + " not arranged");
 			}
 		}
+		logger.debug(area.getShips().length + " ships arranged successfully on \n" + area);
 	}
 
 	public void arrangeShip(Area area, Ship ship) {
@@ -50,7 +52,8 @@ public enum AreaArranger {
 				result = true;
 			} else {
 				result = false;
-				logger.debug(ship + " not arranged, cell [" + ship.getRow()[i] + ", " + ship.getColumn()[i] + "] isn't empty");
+				logger.debug(ship + " not arranged, cell [" + ship.getRow()[i] + ", " + ship.getColumn()[i]
+						+ "] isn't empty (" + area.getCell(ship.getRow()[i], ship.getColumn()[i]).toString() + ")");
 				break;
 			}
 		}

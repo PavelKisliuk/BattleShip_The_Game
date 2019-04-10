@@ -5,6 +5,7 @@ import com.github.PavelKisliuk.model.data.Ship;
 import com.github.PavelKisliuk.util.exception.ShipInitializationException;
 import org.apache.log4j.Logger;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -71,7 +72,7 @@ public enum Initializer {
 
     public void initRandom(Ship ship, int health) {
 
-        Random random = new Random();
+        Random random = new SecureRandom();
 
         boolean isHorizontal = random.nextBoolean();
         int firstCellIndexI = random.nextInt(Area.AREA_SIZE);
