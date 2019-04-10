@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +41,9 @@ public class MainController {
 
 	@FXML
 	private Button newGameButton;
+
+	@FXML
+	private Label gameInfoLabel;
 
 	@FXML
 	void imageViewsOnMouseClicked(MouseEvent event) {
@@ -137,8 +141,12 @@ public class MainController {
 			opponentGridPane.setGridLinesVisible(true);
 			playerGridPane.setGridLinesVisible(true);
 			opponentGridPane.setDisable(false);
+			startButton.setVisible(false);
+			goFirstCheckBox.setVisible(false);
+			newGameButton.setVisible(true);
+			gameInfoLabel.setText("Game start!");
 		} else {
-
+			gameInfoLabel.setText("Ships not arrange! Try again.");
 		}
 	}
 
@@ -160,5 +168,9 @@ public class MainController {
 		opponentGridPane.setGridLinesVisible(false);
 		playerGridPane.setGridLinesVisible(false);
 		opponentGridPane.setDisable(true);
+		startButton.setVisible(true);
+		goFirstCheckBox.setVisible(true);
+		newGameButton.setVisible(false);
+		gameInfoLabel.setText("Click start to play.");
 	}
 }
