@@ -127,19 +127,23 @@ public class AddShipsWindowController {
 
 	private void automaticArrangementButtonOnAction(ActionEvent actionEvent) {
 		area = new Area();
+		//---------------------------------------------------------------
 		if (RandomAreaArranger.INSTANCE.arrangeRandomArea(area)) {
 			isCancel = false;
 			arrangementInfo = "Arrangement successful.";
 			AreaArranger.INSTANCE.changeCelltype(area, Area.CellsType.NEIGHBOR, Area.CellsType.EMPTY);
+			//---------------------------------------------------------------
 			Node b = (Node) actionEvent.getTarget();
 			Stage stage = (Stage) b.getScene().getWindow();
 			stage.close();
 		} else {
 			arrangementInfo = "WARNING! Arrangement was failed!!!";
+			//---------------------------------------------------------------
 			Node b = (Node) actionEvent.getTarget();
 			Stage stage = (Stage) b.getScene().getWindow();
 			stage.close();
 		}
+		//---------------------------------------------------------------
 	}
 
 	private void addShipButtonOnAction() {
@@ -147,7 +151,7 @@ public class AddShipsWindowController {
 		addShipButton.setVisible(false);
 		mainGridPane.setDisable(false);
 		boxesCounter = 0;
-
+		//---------------------------------------------------------------
 		rowsGroup = new ArrayList<>();
 		columnsGroup = new ArrayList<>();
 	}
@@ -156,20 +160,20 @@ public class AddShipsWindowController {
 		infoLabel.setTextFill(Color.BLACK);
 		mainGridPane.setDisable(true);
 		shipAddedButton.setVisible(false);
-
+		//---------------------------------------------------------------
 		shipsGroup[shipsCounter] = new Ship(rowsGroup.size(),
 				Creator.INSTANCE.getIntArray(rowsGroup),
 				Creator.INSTANCE.getIntArray(columnsGroup));
-
+		//---------------------------------------------------------------
 		Creator.INSTANCE.correctShip(shipsGroup[shipsCounter]);
-
+		//---------------------------------------------------------------
 		setDisableChoicesBoxes();
-
+		//---------------------------------------------------------------
 		shipsCounter++;
 		if (shipsCounter < Area.SHIPS_AMOUNT) {
 			addShipButton.setVisible(true);
 		}
-
+		//---------------------------------------------------------------
 		infoLabel.setText(String.format("%s%d%s", "Need to add ", (Area.SHIPS_AMOUNT - shipsCounter), " ships."));
 	}
 
@@ -189,16 +193,9 @@ public class AddShipsWindowController {
 		boxesCounter = 0;
 		rowsGroup = null;
 		columnsGroup = null;
-
-		for (Node n : mainGridPane.getChildren()) {
-			if (n instanceof ImageView) {
-				ImageView image = (ImageView) n;
-				image.setImage(null);
-			}
-		}
-
+		//---------------------------------------------------------------
 		undisableAllBoxes();
-
+		//---------------------------------------------------------------
 		addShipButton.setVisible(true);
 		shipAddedButton.setVisible(false);
 		mainGridPane.setDisable(true);
@@ -209,28 +206,36 @@ public class AddShipsWindowController {
 		for (Node node : mainGridPane.getChildren()) {
 			if (node instanceof ImageView) {
 				node.setDisable(false);
+				ImageView image = (ImageView) node;
+				image.setImage(null);
 			}
 		}
 	}
 
 	private void okButtonOnAction(ActionEvent actionEvent) {
 		try {
+			//---------------------------------------------------------------
 			area = new Area();
 			AreaArranger.INSTANCE.arrangeFewShips(area, shipsGroup);
+			//---------------------------------------------------------------
 			if (Checker.INSTANCE.isRightArrangement(area)) {
+				//---------------------------------------------------------------
 				isCancel = false;
 				arrangementInfo = "Arrangement successful.";
 				AreaArranger.INSTANCE.changeCelltype(area, Area.CellsType.NEIGHBOR, Area.CellsType.EMPTY);
+				//---------------------------------------------------------------
 				Node b = (Node) actionEvent.getTarget();
 				Stage stage = (Stage) b.getScene().getWindow();
 				stage.close();
 			} else {
+				//---------------------------------------------------------------
 				if (shipsCounter >= Area.SHIPS_AMOUNT) {
 					infoLabel.setText("Incorrect arrangement!!!");
 					infoLabel.setTextFill(Color.RED);
 				} else {
 					infoLabel.setTextFill(Color.RED);
 				}
+				//---------------------------------------------------------------
 			}
 		} catch (AreaArrangementException | NullPointerException e) {
 			infoLabel.setTextFill(Color.RED);
