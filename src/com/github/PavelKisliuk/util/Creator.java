@@ -3,6 +3,8 @@ package com.github.PavelKisliuk.util;
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.data.Ship;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,11 +23,21 @@ public enum  Creator {
         return new Area();
     }
 
-    public static int[] getIntArray(List<Integer> ar) {
+    public int[] getIntArray(List<Integer> ar) {
         int[] newAr = new int[ar.size()];
         for(int i = 0; i < newAr.length; i++) {
             newAr[i] = ar.get(i);
         }
         return newAr;
+    }
+
+    public void correctShip(Ship ship) {
+        if(ship.getHealth() > 1) {
+            int[] cor = ship.getRow();
+            if(cor[0] == cor[1]) {
+                cor = ship.getColumn();
+            }
+           Arrays.sort(cor);
+        }
     }
 }
