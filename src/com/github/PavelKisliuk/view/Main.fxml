@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -669,7 +670,7 @@
                   <Font size="12.0" />
                </font>
             </CheckBox>
-            <Button fx:id="newGameButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="New game">
+            <Button fx:id="newGameButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="New game" visible="false">
                <font>
                   <Font size="14.0" />
                </font>
@@ -683,4 +684,24 @@
    <right>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
    </right>
+   <bottom>
+      <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <ProgressBar prefHeight="20.0" prefWidth="400.0" progress="0.0" />
+            <Label alignment="CENTER" prefHeight="20.0" prefWidth="300.0" text="Label">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="gameInfoLabel" alignment="CENTER" prefHeight="20.0" prefWidth="300.0" text="Click start to play.">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+   </bottom>
 </BorderPane>

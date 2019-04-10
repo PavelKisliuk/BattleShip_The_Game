@@ -63,7 +63,7 @@ public class AddShipsWindowController {
 	@FXML
 	void imageViewsOnMouseClicked(MouseEvent event) {
 		ImageView image = (ImageView) event.getTarget();
-		if(image.getImage() != SHIP) {
+		if (image.getImage() != SHIP) {
 			image.setImage(SHIP);
 
 			Integer row = GridPane.getRowIndex(image);
@@ -85,7 +85,7 @@ public class AddShipsWindowController {
 			boxesCounter--;
 		}
 
-		if(boxesCounter > 0) {
+		if (boxesCounter > 0) {
 			shipAddedButton.setVisible(true);
 		} else {
 			shipAddedButton.setVisible(false);
@@ -95,7 +95,7 @@ public class AddShipsWindowController {
 	@FXML
 	void imageViewsOnMouseEntered(MouseEvent event) {
 		ImageView image = (ImageView) event.getTarget();
-		if(image.getImage() != SHIP) {
+		if (image.getImage() != SHIP) {
 			image.setImage(POINTED);
 		}
 	}
@@ -103,7 +103,7 @@ public class AddShipsWindowController {
 	@FXML
 	void imageViewsOnMouseExited(MouseEvent event) {
 		ImageView image = (ImageView) event.getTarget();
-		if(image.getImage() != SHIP) {
+		if (image.getImage() != SHIP) {
 			image.setImage(null);
 		}
 	}
@@ -121,9 +121,9 @@ public class AddShipsWindowController {
 		cancelButton.setOnAction(this::cancelButtonOnAction);
 	}
 
-	private void automaticArrangementButtonOnAction(ActionEvent actionEvent){
+	private void automaticArrangementButtonOnAction(ActionEvent actionEvent) {
 		area = new Area();
-		if(RandomAreaArranger.INSTANCE.arrangeRandomArea(area)) {
+		if (RandomAreaArranger.INSTANCE.arrangeRandomArea(area)) {
 			isCancel = false;
 			arrangementInfo = "Arrangement successful.";
 			Node b = (Node) actionEvent.getTarget();
@@ -161,7 +161,7 @@ public class AddShipsWindowController {
 		setDisableChoicesBoxes();
 
 		shipsCounter++;
-		if (shipsCounter < Area.SHIPS_AMOUNT){
+		if (shipsCounter < Area.SHIPS_AMOUNT) {
 			addShipButton.setVisible(true);
 		}
 
@@ -177,7 +177,7 @@ public class AddShipsWindowController {
 		}
 	}
 
-	private void discardButtonOnAction(){
+	private void discardButtonOnAction() {
 		infoLabel.setTextFill(Color.BLACK);
 		shipsGroup = new Ship[Area.SHIPS_AMOUNT];
 		shipsCounter = 0;
@@ -185,8 +185,8 @@ public class AddShipsWindowController {
 		rowsGroup = null;
 		columnsGroup = null;
 
-		for(Node n : mainGridPane.getChildren()) {
-			if(n instanceof ImageView) {
+		for (Node n : mainGridPane.getChildren()) {
+			if (n instanceof ImageView) {
 				ImageView image = (ImageView) n;
 				image.setImage(null);
 			}
@@ -202,14 +202,14 @@ public class AddShipsWindowController {
 		try {
 			area = new Area();
 			AreaArranger.INSTANCE.arrangeFewShips(area, shipsGroup);
-			if(Checker.INSTANCE.isRightArrangement(area)) {
+			if (Checker.INSTANCE.isRightArrangement(area)) {
 				isCancel = false;
 				arrangementInfo = "Arrangement successful.";
 				Node b = (Node) actionEvent.getTarget();
 				Stage stage = (Stage) b.getScene().getWindow();
 				stage.close();
-			}else {
-				if(shipsCounter >= Area.SHIPS_AMOUNT){
+			} else {
+				if (shipsCounter >= Area.SHIPS_AMOUNT) {
 					infoLabel.setText("Incorrect arrangement!!!");
 					infoLabel.setTextFill(Color.RED);
 				} else {

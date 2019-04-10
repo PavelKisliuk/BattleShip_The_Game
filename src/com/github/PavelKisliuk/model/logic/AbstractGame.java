@@ -7,13 +7,11 @@ public abstract class AbstractGame {
 		NORTH, EAST, SOUTH, WEST
 	}
 
-	public static void arrangement(Area area)
-	{
+	public static void arrangement(Area area) {
 
 	}
 
-	public static void arrangement(Area main, Area complete)
-	{
+	public static void arrangement(Area main, Area complete) {
 
 	}
 }
