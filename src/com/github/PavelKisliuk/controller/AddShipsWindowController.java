@@ -7,6 +7,7 @@ import com.github.PavelKisliuk.util.Checker;
 import com.github.PavelKisliuk.util.Creator;
 import com.github.PavelKisliuk.util.RandomAreaArranger;
 import com.github.PavelKisliuk.util.exception.AreaArrangementException;
+import com.github.PavelKisliuk.util.exception.ShipHealthException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -238,6 +239,9 @@ public class AddShipsWindowController {
 				//---------------------------------------------------------------
 			}
 		} catch (AreaArrangementException | NullPointerException e) {
+			infoLabel.setTextFill(Color.RED);
+		} catch (ShipHealthException e) {
+			infoLabel.setText("Incorrect arrangement!!!");
 			infoLabel.setTextFill(Color.RED);
 		}
 	}
