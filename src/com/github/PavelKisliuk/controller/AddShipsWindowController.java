@@ -153,8 +153,10 @@ public class AddShipsWindowController {
 		shipAddedButton.setVisible(false);
 
 		shipsGroup[shipsCounter] = new Ship(rowsGroup.size(),
-				Creator.getIntArray(rowsGroup),
-				Creator.getIntArray(columnsGroup));
+				Creator.INSTANCE.getIntArray(rowsGroup),
+				Creator.INSTANCE.getIntArray(columnsGroup));
+
+		Creator.INSTANCE.correctShip(shipsGroup[shipsCounter]);
 
 		setDisableChoicesBoxes();
 
@@ -202,6 +204,7 @@ public class AddShipsWindowController {
 			AreaArranger.INSTANCE.arrangeFewShips(area, shipsGroup);
 			if(Checker.INSTANCE.isRightArrangement(area)) {
 				isCancel = false;
+				arrangementInfo = "Arrangement successful.";
 				Node b = (Node) actionEvent.getTarget();
 				Stage stage = (Stage) b.getScene().getWindow();
 				stage.close();
