@@ -54,6 +54,7 @@ public class AreaArrangerTest {
                 new Ship(4, new int[]{0,1,2,3}, new int[]{3,3,3,3}),
         };
         arranger.arrangeFewShips(area, ships);
+        arranger.changeCelltype(area, NEIGHBOR, EMPTY);
         System.out.println(area);
 
         Area testArea = Creator.INSTANCE.createArea();

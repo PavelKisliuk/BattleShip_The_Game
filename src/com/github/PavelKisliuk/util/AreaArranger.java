@@ -3,6 +3,7 @@ package com.github.PavelKisliuk.util;
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.data.Ship;
 import com.github.PavelKisliuk.util.exception.AreaArrangementException;
+import javafx.scene.control.Cell;
 import org.apache.log4j.Logger;
 
 /**
@@ -43,6 +44,17 @@ public enum AreaArranger {
 			logger.debug(ship + " arranged successfully");
 		}
 		arrangeNeighbors(area);
+	}
+
+	public void changeCelltype(Area area, Area.CellsType cellsTypeOut, Area.CellsType cellsTypeIn) {
+		for (int i = 0; i < area.length(); i++) {
+			for (int j = 0; j < area.width(); j++) {
+				if (area.getCell(i, j) == cellsTypeOut) {
+					area.setCell(i, j, cellsTypeIn);
+					logger.debug("(" + i + ", " + j + ")" + " changed to " + cellsTypeIn);
+				}
+			}
+		}
 	}
 
 	private boolean isSuited(Area area, Ship ship) {

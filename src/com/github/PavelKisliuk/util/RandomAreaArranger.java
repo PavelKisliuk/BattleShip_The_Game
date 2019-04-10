@@ -101,6 +101,8 @@ public enum  RandomAreaArranger {
 
         logger.debug(area.getShips().length + " random ships was successfully arranged on \n" + area);
 
+        arranger.changeCelltype(area, Area.CellsType.NEIGHBOR, Area.CellsType.EMPTY);
+
         return checker.isRightArrangement(area);
     }
 }
