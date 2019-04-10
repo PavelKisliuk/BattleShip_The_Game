@@ -63,33 +63,37 @@ public class AddShipsWindowController {
 	@FXML
 	void imageViewsOnMouseClicked(MouseEvent event) {
 		ImageView image = (ImageView) event.getTarget();
+		//---------------------------------------------------------------
 		if (image.getImage() != SHIP) {
 			image.setImage(SHIP);
-
+			//---------------------------------------------------------------
 			Integer row = GridPane.getRowIndex(image);
 			Integer column = GridPane.getColumnIndex(image);
 			if (row == null) row = 0;
 			if (column == null) column = 0;
 			rowsGroup.add(row);
 			columnsGroup.add(column);
+			//---------------------------------------------------------------
 			boxesCounter++;
 		} else {
 			image.setImage(null);
-
+			//---------------------------------------------------------------
 			Integer row = GridPane.getRowIndex(image);
 			Integer column = GridPane.getColumnIndex(image);
 			if (row == null) row = 0;
 			if (column == null) column = 0;
 			rowsGroup.remove(row);
 			columnsGroup.remove(column);
+			//---------------------------------------------------------------
 			boxesCounter--;
 		}
-
+		//---------------------------------------------------------------
 		if (boxesCounter > 0) {
 			shipAddedButton.setVisible(true);
 		} else {
 			shipAddedButton.setVisible(false);
 		}
+		//---------------------------------------------------------------
 	}
 
 	@FXML
@@ -112,7 +116,7 @@ public class AddShipsWindowController {
 	void initialize() {
 		shipsGroup = new Ship[Area.SHIPS_AMOUNT];
 		isCancel = true;
-
+		//---------------------------------------------------------------
 		automaticArrangementButton.setOnAction(this::automaticArrangementButtonOnAction);
 		addShipButton.setOnAction(actionEvent -> addShipButtonOnAction());
 		shipAddedButton.setOnAction(actionEvent -> shipAddedButtonOnAction());
@@ -193,10 +197,20 @@ public class AddShipsWindowController {
 			}
 		}
 
+		undisableAllBoxes();
+
 		addShipButton.setVisible(true);
 		shipAddedButton.setVisible(false);
 		mainGridPane.setDisable(true);
 		infoLabel.setText(String.format("%s%d%s", "Need to add ", (Area.SHIPS_AMOUNT - shipsCounter), " ships."));
+	}
+
+	private void undisableAllBoxes() {
+		for (Node node : mainGridPane.getChildren()) {
+			if (node instanceof ImageView) {
+				node.setDisable(false);
+			}
+		}
 	}
 
 	private void okButtonOnAction(ActionEvent actionEvent) {
@@ -228,7 +242,6 @@ public class AddShipsWindowController {
 		Stage stage = (Stage) b.getScene().getWindow();
 		stage.close();
 	}
-
 
 	public boolean isCancel() {
 		return isCancel;
