@@ -2,7 +2,11 @@ package com.github.PavelKisliuk.controller;
 
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.data.Ship;
+import com.github.PavelKisliuk.util.AreaArranger;
+import com.github.PavelKisliuk.util.Checker;
 import com.github.PavelKisliuk.util.Creator;
+import com.github.PavelKisliuk.util.RandomAreaArranger;
+import com.github.PavelKisliuk.util.exception.AreaArrangementException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -29,6 +34,10 @@ public class AddShipsWindowController {
 
 	private Area area;
 	private boolean isCancel;
+	private String arrangementInfo;
+
+	@FXML
+	private Button automaticArrangementButton;
 
 	@FXML
 	private GridPane mainGridPane;
@@ -104,6 +113,7 @@ public class AddShipsWindowController {
 		shipsGroup = new Ship[Area.SHIPS_AMOUNT];
 		isCancel = true;
 
+		automaticArrangementButton.setOnAction(this::automaticArrangementButtonOnAction);
 		addShipButton.setOnAction(actionEvent -> addShipButtonOnAction());
 		shipAddedButton.setOnAction(actionEvent -> shipAddedButtonOnAction());
 		discardButton.setOnAction(actionEvent -> discardButtonOnAction());
@@ -111,7 +121,24 @@ public class AddShipsWindowController {
 		cancelButton.setOnAction(this::cancelButtonOnAction);
 	}
 
+	private void automaticArrangementButtonOnAction(ActionEvent actionEvent){
+		area = new Area();
+		if(RandomAreaArranger.INSTANCE.arrangeRandomArea(area)) {
+			isCancel = false;
+			arrangementInfo = "Arrangement successful.";
+			Node b = (Node) actionEvent.getTarget();
+			Stage stage = (Stage) b.getScene().getWindow();
+			stage.close();
+		} else {
+			arrangementInfo = "WARNING! Arrangement was failed!!!";
+			Node b = (Node) actionEvent.getTarget();
+			Stage stage = (Stage) b.getScene().getWindow();
+			stage.close();
+		}
+	}
+
 	private void addShipButtonOnAction() {
+		infoLabel.setTextFill(Color.BLACK);
 		addShipButton.setVisible(false);
 		mainGridPane.setDisable(false);
 		boxesCounter = 0;
@@ -121,6 +148,7 @@ public class AddShipsWindowController {
 	}
 
 	private void shipAddedButtonOnAction() {
+		infoLabel.setTextFill(Color.BLACK);
 		mainGridPane.setDisable(true);
 		shipAddedButton.setVisible(false);
 
@@ -148,6 +176,7 @@ public class AddShipsWindowController {
 	}
 
 	private void discardButtonOnAction(){
+		infoLabel.setTextFill(Color.BLACK);
 		shipsGroup = new Ship[Area.SHIPS_AMOUNT];
 		shipsCounter = 0;
 		boxesCounter = 0;
@@ -168,12 +197,25 @@ public class AddShipsWindowController {
 	}
 
 	private void okButtonOnAction(ActionEvent actionEvent) {
-
-
-		isCancel = false;
-		Node b = (Node) actionEvent.getTarget();
-		Stage stage = (Stage) b.getScene().getWindow();
-		stage.close();
+		try {
+			area = new Area();
+			AreaArranger.INSTANCE.arrangeFewShips(area, shipsGroup);
+			if(Checker.INSTANCE.isRightArrangement(area)) {
+				isCancel = false;
+				Node b = (Node) actionEvent.getTarget();
+				Stage stage = (Stage) b.getScene().getWindow();
+				stage.close();
+			}else {
+				if(shipsCounter >= Area.SHIPS_AMOUNT){
+					infoLabel.setText("Incorrect arrangement!!!");
+					infoLabel.setTextFill(Color.RED);
+				} else {
+					infoLabel.setTextFill(Color.RED);
+				}
+			}
+		} catch (AreaArrangementException | NullPointerException e) {
+			infoLabel.setTextFill(Color.RED);
+		}
 	}
 
 	private void cancelButtonOnAction(ActionEvent actionEvent) {
@@ -185,5 +227,13 @@ public class AddShipsWindowController {
 
 	public boolean isCancel() {
 		return isCancel;
+	}
+
+	public Area getArea() {
+		return area;
+	}
+
+	public String getArrangementInfo() {
+		return arrangementInfo;
 	}
 }
