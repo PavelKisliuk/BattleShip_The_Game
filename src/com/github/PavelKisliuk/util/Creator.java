@@ -3,6 +3,8 @@ package com.github.PavelKisliuk.util;
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.data.Ship;
 
+import java.util.List;
+
 /**
  * @author dzmitryplatonov on 2019-04-06.
  * @version 0.0.1
@@ -19,10 +21,10 @@ public enum  Creator {
         return new Area();
     }
 
-    public int[] getIntArray(Integer[] ar) {
-        int[] newAr = new int[ar.length];
-        for(int i = 0; i < ar.length; i++) {
-            newAr[i] = ar[i];
+    public static int[] getIntArray(List<Integer> ar) {
+        int[] newAr = new int[ar.size()];
+        for(int i = 0; i < newAr.length; i++) {
+            newAr[i] = ar.get(i);
         }
         return newAr;
     }
