@@ -6,12 +6,4 @@ public abstract class AbstractGame {
 	public enum Way {
 		NORTH, EAST, SOUTH, WEST
 	}
-
-	public static void arrangement(Area area) {
-
-	}
-
-	public static void arrangement(Area main, Area complete) {
-
-	}
 }
