@@ -135,6 +135,10 @@ public class Area {
                     str.append("* ");
                 } else if (cellsTypes[i][j] == CellsType.NEIGHBOR) {
                     str.append("/ ");
+                } else if (cellsTypes[i][j] == CellsType.BEATEN){
+                    str.append("b ");
+                } else if (cellsTypes[i][j] == CellsType.KILLED) {
+                    str.append("k ");
                 } else {
                     str.append("@ ");
                 }

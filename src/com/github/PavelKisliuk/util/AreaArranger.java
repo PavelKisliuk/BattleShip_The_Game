@@ -3,7 +3,6 @@ package com.github.PavelKisliuk.util;
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.data.Ship;
 import com.github.PavelKisliuk.util.exception.AreaArrangementException;
-import javafx.scene.control.Cell;
 import org.apache.log4j.Logger;
 
 /**
@@ -27,7 +26,7 @@ public enum AreaArranger {
 		for (Ship ship : ships) {
 			if (isSuited(area, ship)) {
 				arrangeShip(area, ship);
-				arrangeNeighbors(area);
+				arrangeNeighbors(area, Area.CellsType.SHIP);
 			} else {
 				logger.debug(ship + " not arranged");
 			}
@@ -43,7 +42,7 @@ public enum AreaArranger {
 			area.addShip(ship);
 			logger.debug(ship + " arranged successfully");
 		}
-		arrangeNeighbors(area);
+		arrangeNeighbors(area, Area.CellsType.SHIP);
 	}
 
 	public void changeCelltype(Area area, Area.CellsType cellsTypeOut, Area.CellsType cellsTypeIn) {
@@ -51,10 +50,11 @@ public enum AreaArranger {
 			for (int j = 0; j < area.width(); j++) {
 				if (area.getCell(i, j) == cellsTypeOut) {
 					area.setCell(i, j, cellsTypeIn);
-					logger.debug("(" + i + ", " + j + ")" + " changed to " + cellsTypeIn);
+					//logger.debug("(" + i + ", " + j + ")" + " changed to " + cellsTypeIn);
 				}
 			}
 		}
+		logger.debug(Area.CellsType.NEIGHBOR + " changed to " + Area.CellsType.EMPTY);
 	}
 
 	private boolean isSuited(Area area, Ship ship) {
@@ -73,75 +73,75 @@ public enum AreaArranger {
 	}
 
 
-	private void arrangeNeighbors(Area area) {
+	public void arrangeNeighbors(Area area, Area.CellsType contactCellsType) {
 		for (int i = 0; i < area.length(); i++) {
 			for (int j = 0; j < area.width(); j++) {
-				if (isCellContactWithShip(area, i, j) && area.getCell(i, j) != Area.CellsType.SHIP) {
+				if (isCellContactWithCellType(area, i, j, contactCellsType) && area.getCell(i, j) != Area.CellsType.SHIP) {
 					area.setCell(i, j, Area.CellsType.NEIGHBOR);
 				}
 			}
 		}
 	}
 
-	private boolean isCellContactWithShip(Area area, int i, int j) {
+	public boolean isCellContactWithCellType(Area area, int i, int j, Area.CellsType cellsType) {
 		boolean result = false;
 		if (i > 0 && i < area.length() - 1 && j > 0 && j < area.width() - 1
-				&& (checkSouth(area, i, j, Area.CellsType.SHIP)
-				|| checkSouthWest(area, i, j, Area.CellsType.SHIP)
-				|| checkWest(area, i, j, Area.CellsType.SHIP)
-				|| checkNorthWest(area, i, j, Area.CellsType.SHIP)
-				|| checkNorth(area, i, j, Area.CellsType.SHIP)
-				|| checkNorthEast(area, i, j, Area.CellsType.SHIP)
-				|| checkEast(area, i, j, Area.CellsType.SHIP)
-				|| checkSouthEast(area, i, j, Area.CellsType.SHIP))) {
+				&& (checkSouth(area, i, j, cellsType)
+				|| checkSouthWest(area, i, j, cellsType)
+				|| checkWest(area, i, j, cellsType)
+				|| checkNorthWest(area, i, j, cellsType)
+				|| checkNorth(area, i, j, cellsType)
+				|| checkNorthEast(area, i, j, cellsType)
+				|| checkEast(area, i, j, cellsType)
+				|| checkSouthEast(area, i, j, cellsType))) {
 			result = true;
 		}
-		if (i == 0 && j > 0 && j < area.width() - 1 && ((checkSouth(area, i, j, Area.CellsType.SHIP)
-				|| checkSouthWest(area, i, j, Area.CellsType.SHIP)
-				|| checkWest(area, i, j, Area.CellsType.SHIP)
-				|| checkEast(area, i, j, Area.CellsType.SHIP)
-				|| checkSouthEast(area, i, j, Area.CellsType.SHIP)))) {
+		if (i == 0 && j > 0 && j < area.width() - 1 && ((checkSouth(area, i, j, cellsType)
+				|| checkSouthWest(area, i, j, cellsType)
+				|| checkWest(area, i, j, cellsType)
+				|| checkEast(area, i, j, cellsType)
+				|| checkSouthEast(area, i, j, cellsType)))) {
 			result = true;
 		}
-		if (i == area.length() - 1 && j > 0 && j < area.width() - 1 && (checkWest(area, i, j, Area.CellsType.SHIP)
-				|| checkNorthWest(area, i, j, Area.CellsType.SHIP)
-				|| checkNorth(area, i, j, Area.CellsType.SHIP)
-				|| checkNorthEast(area, i, j, Area.CellsType.SHIP)
-				|| checkEast(area, i, j, Area.CellsType.SHIP))) {
+		if (i == area.length() - 1 && j > 0 && j < area.width() - 1 && (checkWest(area, i, j, cellsType)
+				|| checkNorthWest(area, i, j, cellsType)
+				|| checkNorth(area, i, j, cellsType)
+				|| checkNorthEast(area, i, j, cellsType)
+				|| checkEast(area, i, j, cellsType))) {
 			result = true;
 		}
-		if (j == 0 && i > 0 && i < area.length() - 1 && (checkSouth(area, i, j, Area.CellsType.SHIP)
-				|| checkNorth(area, i, j, Area.CellsType.SHIP)
-				|| checkNorthEast(area, i, j, Area.CellsType.SHIP)
-				|| checkEast(area, i, j, Area.CellsType.SHIP)
-				|| checkSouthEast(area, i, j, Area.CellsType.SHIP))) {
+		if (j == 0 && i > 0 && i < area.length() - 1 && (checkSouth(area, i, j, cellsType)
+				|| checkNorth(area, i, j, cellsType)
+				|| checkNorthEast(area, i, j, cellsType)
+				|| checkEast(area, i, j, cellsType)
+				|| checkSouthEast(area, i, j, cellsType))) {
 			result = true;
 		}
-		if (j == area.width() - 1 && i > 0 && i < area.length() - 1 && (checkSouth(area, i, j, Area.CellsType.SHIP)
-				|| checkSouthWest(area, i, j, Area.CellsType.SHIP)
-				|| checkWest(area, i, j, Area.CellsType.SHIP)
-				|| checkNorthWest(area, i, j, Area.CellsType.SHIP)
-				|| checkNorth(area, i, j, Area.CellsType.SHIP))) {
+		if (j == area.width() - 1 && i > 0 && i < area.length() - 1 && (checkSouth(area, i, j, cellsType)
+				|| checkSouthWest(area, i, j, cellsType)
+				|| checkWest(area, i, j, cellsType)
+				|| checkNorthWest(area, i, j, cellsType)
+				|| checkNorth(area, i, j, cellsType))) {
 			result = true;
 		}
-		if (j == 0 && i == 0 && (checkSouth(area, i, j, Area.CellsType.SHIP)
-				|| checkEast(area, i, j, Area.CellsType.SHIP)
-				|| checkSouthEast(area, i, j, Area.CellsType.SHIP))) {
+		if (j == 0 && i == 0 && (checkSouth(area, i, j, cellsType)
+				|| checkEast(area, i, j, cellsType)
+				|| checkSouthEast(area, i, j, cellsType))) {
 			result = true;
 		}
-		if (j == 0 && i == area.length() - 1 && (checkNorth(area, i, j, Area.CellsType.SHIP)
-				|| checkNorthEast(area, i, j, Area.CellsType.SHIP)
-				|| checkEast(area, i, j, Area.CellsType.SHIP))) {
+		if (j == 0 && i == area.length() - 1 && (checkNorth(area, i, j, cellsType)
+				|| checkNorthEast(area, i, j, cellsType)
+				|| checkEast(area, i, j, cellsType))) {
 			result = true;
 		}
-		if (j == area.width() - 1 && i == 0 && (checkSouth(area, i, j, Area.CellsType.SHIP)
-				|| checkSouthWest(area, i, j, Area.CellsType.SHIP)
-				|| checkWest(area, i, j, Area.CellsType.SHIP))) {
+		if (j == area.width() - 1 && i == 0 && (checkSouth(area, i, j, cellsType)
+				|| checkSouthWest(area, i, j, cellsType)
+				|| checkWest(area, i, j, cellsType))) {
 			result = true;
 		}
-		if (j == area.width() - 1 && i == area.length() - 1 && (checkWest(area, i, j, Area.CellsType.SHIP)
-				|| checkNorthWest(area, i, j, Area.CellsType.SHIP)
-				|| checkNorth(area, i, j, Area.CellsType.SHIP))) {
+		if (j == area.width() - 1 && i == area.length() - 1 && (checkWest(area, i, j, cellsType)
+				|| checkNorthWest(area, i, j, cellsType)
+				|| checkNorth(area, i, j, cellsType))) {
 			result = true;
 		}
 		return result;
