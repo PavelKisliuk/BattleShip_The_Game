@@ -28,7 +28,7 @@ public class MainController {
 
 	AbstractGame game;
 	private Area playerArea;
-	private Area opponentAre;
+	private Area opponentArea;
 
 	@FXML
 	private GridPane playerGridPane;
@@ -113,46 +113,63 @@ public class MainController {
 			e.printStackTrace();
 		}
 	}
-
+	//---------------------------------------------------------------
+	//---------------------------------------------------------------
 	private void startButtonOnAction() {
+		setPlayerArea();
+
+	}
+
+	private void setPlayerArea() {
 		String path = "/com/github/PavelKisliuk/view/AddShipsWindow.fxml";
 		String title = "Arrangement of ships";
 		openWindow(path, title);
 
 		if (!(ASWController.isCancel())) {
 			playerArea = ASWController.getArea();
-
-			for (Node n : playerGridPane.getChildren()) {
-				if (n instanceof ImageView) {
-					Integer row = GridPane.getRowIndex(n);
-					Integer column = GridPane.getColumnIndex(n);
-					if (row == null) row = 0;
-					if (column == null) column = 0;
-
-					if (playerArea.getCell(row, column) == Area.CellsType.SHIP) {
-						((ImageView) n).setImage(SHIP);
-					}
-				}
-			}
-
-			for (Node n : opponentGridPane.getChildren()) {
-				if (n instanceof ImageView) {
-					ImageView image = (ImageView) n;
-					image.setImage(COVERT);
-				}
-			}
-			opponentGridPane.setGridLinesVisible(true);
-			playerGridPane.setGridLinesVisible(true);
-			opponentGridPane.setDisable(false);
-			startButton.setVisible(false);
-			goFirstCheckBox.setVisible(false);
-			newGameButton.setVisible(true);
-			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
+			setShipsOnPlayerArea();
+			coverOpponentArea();
+			setWindowElementsOnStartButton();
 		} else {
 			gameInfoLabel.setText("Ships not arrange! Try again.");
 		}
 	}
 
+	private void setShipsOnPlayerArea() {
+		for (Node n : playerGridPane.getChildren()) {
+			if (n instanceof ImageView) {
+				Integer row = GridPane.getRowIndex(n);
+				Integer column = GridPane.getColumnIndex(n);
+				if (row == null) row = 0;
+				if (column == null) column = 0;
+
+				if (playerArea.getCell(row, column) == Area.CellsType.SHIP) {
+					((ImageView) n).setImage(SHIP);
+				}
+			}
+		}
+	}
+
+	private void coverOpponentArea() {
+		for (Node n : opponentGridPane.getChildren()) {
+			if (n instanceof ImageView) {
+				ImageView image = (ImageView) n;
+				image.setImage(COVERT);
+			}
+		}
+	}
+
+	private void setWindowElementsOnStartButton() {
+		opponentGridPane.setGridLinesVisible(true);
+		playerGridPane.setGridLinesVisible(true);
+		opponentGridPane.setDisable(false);
+		startButton.setVisible(false);
+		goFirstCheckBox.setVisible(false);
+		newGameButton.setVisible(true);
+		gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
+	}
+	//---------------------------------------------------------------
+	//---------------------------------------------------------------
 	private void newGameOnAction() {
 		for (Node n : opponentGridPane.getChildren()) {
 			if (n instanceof ImageView) {
