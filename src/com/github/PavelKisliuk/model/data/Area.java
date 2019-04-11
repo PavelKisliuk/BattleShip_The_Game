@@ -23,7 +23,7 @@ public class Area {
 
 
     public enum CellsType {
-        EMPTY, SHIP, NEIGHBOR, BEATEN, MISS
+        EMPTY, SHIP, NEIGHBOR, BEATEN, MISS, KILLED
     }
 
     public Area() {

@@ -8,4 +8,10 @@ public abstract class AbstractGame {
 	}
 
 	public abstract Area getOpponentArea();
+	public abstract boolean playerGoFirst();
+	public abstract boolean opponentGo(Area area);
+
+	public void playerGo(Area area, int row, int column) {
+
+	}
 }

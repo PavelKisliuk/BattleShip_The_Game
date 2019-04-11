@@ -23,10 +23,13 @@ public class MainController {
 	private final Image COVERT = new Image("com/github/PavelKisliuk/image/covert.jpg");
 	private final Image POINTED = new Image("com/github/PavelKisliuk/image/pointed.jpg");
 	private final Image SHIP = new Image("com/github/PavelKisliuk/image/ship.jpg");
+	private final Image WOUNDED = new Image("com/github/PavelKisliuk/image/wounded.jpg");
+	private final Image MISSED = new Image("com/github/PavelKisliuk/image/missed.jpg");
+	private final Image KILLED = new Image("com/github/PavelKisliuk/image/killed.jpg");
 
 	private AddShipsWindowController ASWController;
 
-	AbstractGame game;
+	private AbstractGame game;
 	private Area playerArea;
 	private Area opponentArea;
 
@@ -51,7 +54,23 @@ public class MainController {
 	@FXML
 	void imageViewsOnMouseClicked(MouseEvent event) {
 		ImageView image = (ImageView) event.getTarget();
-		image.setImage(null);
+		Integer row = GridPane.getRowIndex(image);
+		Integer column = GridPane.getColumnIndex(image);
+		if (row == null) row = 0;
+		if (column == null) column = 0;
+
+		game.playerGo(opponentArea, row, column);
+		switch (opponentArea.getCell(row, column)) {
+			case MISS:
+				image.setImage(MISSED);
+				break;
+			case BEATEN:
+				image.setImage(WOUNDED);
+				break;
+			case KILLED:
+				image.setImage(KILLED);
+				break;
+		}
 		image.setDisable(true);
 	}
 
@@ -64,7 +83,7 @@ public class MainController {
 	@FXML
 	void imageViewsOnMouseExited(MouseEvent event) {
 		ImageView image = (ImageView) event.getTarget();
-		if (image.getImage() != null) {
+		if (image.getImage() == POINTED) {
 			image.setImage(COVERT);
 		}
 	}
@@ -113,11 +132,15 @@ public class MainController {
 			e.printStackTrace();
 		}
 	}
+
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
 	private void startButtonOnAction() {
 		setPlayerArea();
 		opponentArea = game.getOpponentArea();
+		if (!(game.playerGoFirst())) {
+			opponentGoConfigure();
+		}
 	}
 
 	private void setPlayerArea() {
@@ -168,6 +191,39 @@ public class MainController {
 		newGameButton.setVisible(true);
 		gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
 	}
+
+	private void opponentGoConfigure() {
+		opponentGridPane.setDisable(true);
+		while (game.opponentGo(playerArea)) {
+
+		}
+		redisplay(playerGridPane, playerArea);
+		opponentGridPane.setDisable(false);
+	}
+
+	private void redisplay(GridPane gridPane, Area area) {
+		for (Node n : gridPane.getChildren()) {
+			if (n instanceof ImageView) {
+				Integer row = GridPane.getRowIndex(n);
+				Integer column = GridPane.getColumnIndex(n);
+				if (row == null) row = 0;
+				if (column == null) column = 0;
+
+				switch (playerArea.getCell(row, column)) {
+					case MISS:
+						((ImageView) n).setImage(MISSED);
+						break;
+					case BEATEN:
+						((ImageView) n).setImage(WOUNDED);
+						break;
+					case KILLED:
+						((ImageView) n).setImage(KILLED);
+						break;
+				}
+			}
+		}
+	}
+
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
 	private void newGameOnAction() {
@@ -175,6 +231,7 @@ public class MainController {
 			if (n instanceof ImageView) {
 				ImageView image = (ImageView) n;
 				image.setImage(null);
+				image.setDisable(false);
 			}
 		}
 
