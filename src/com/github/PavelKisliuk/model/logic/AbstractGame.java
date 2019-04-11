@@ -24,6 +24,7 @@ public abstract class AbstractGame {
         AreaArranger arranger = AreaArranger.INSTANCE;
         shoot(area, row, column);
         if (area.getCell(row, column) == Area.CellsType.BEATEN) {
+            ringBeatenDiagonalsWithMiss(area);
             for (Ship ship : area.getShips()) {
                 if (isKilled(area, ship)) {
                     for (int i = 0; i < ship.getHealth(); i++) {
@@ -37,7 +38,7 @@ public abstract class AbstractGame {
             for (int j = 0; j < area.width(); j++) {
                 if (arranger.isCellContactWithCellType(area, i, j, Area.CellsType.KILLED)
                         && area.getCell(i, j) != Area.CellsType.KILLED) {
-                    area.setCell(i, j, Area.CellsType.NEIGHBOR);
+                    area.setCell(i, j, Area.CellsType.MISS);
                 }
             }
         }
@@ -84,5 +85,64 @@ public abstract class AbstractGame {
             logger.debug(ship + " KILLED");
         }
         return result;
+    }
+
+    private void ringBeatenDiagonalsWithMiss(Area area) {
+        for (int i = 0; i < area.length(); i++) {
+            for (int j = 0; j < area.width(); j++) {
+                if (area.getCell(i, j) == Area.CellsType.BEATEN) {
+                    if (i > 0 && i < Area.AREA_SIZE - 1 && j > 0 && j < Area.AREA_SIZE - 1) {
+                        area.setCell(i + 1, j + 1, Area.CellsType.MISS);
+                        area.setCell(i + 1, j - 1, Area.CellsType.MISS);
+                        area.setCell(i - 1, j - 1, Area.CellsType.MISS);
+                        area.setCell(i - 1, j + 1, Area.CellsType.MISS);
+                    }
+
+                    if (i == 0 && j > 0 && j < Area.AREA_SIZE - 1) {
+                        area.setCell(i + 1, j + 1, Area.CellsType.MISS);
+                        area.setCell(i + 1, j - 1, Area.CellsType.MISS);
+                    }
+
+                    if (i == Area.AREA_SIZE - 1 && j > 0 && j < Area.AREA_SIZE - 1) {
+                        area.setCell(i - 1, j - 1, Area.CellsType.MISS);
+                        area.setCell(i - 1, j + 1, Area.CellsType.MISS);
+                    }
+
+                    if (i > 0 && i < Area.AREA_SIZE - 1 && j == 0) {
+                        area.setCell(i + 1, j + 1, Area.CellsType.MISS);
+                        area.setCell(i - 1, j + 1, Area.CellsType.MISS);
+                    }
+
+                    if (i > 0 && i < Area.AREA_SIZE - 1 && j == Area.AREA_SIZE - 1) {
+                        area.setCell(i + 1, j - 1, Area.CellsType.MISS);
+                        area.setCell(i - 1, j - 1, Area.CellsType.MISS);
+                    }
+
+                    if (i == 0 && j == 0) {
+                        area.setCell(i + 1, j + 1, Area.CellsType.MISS);
+                    }
+
+                    if (i == Area.AREA_SIZE - 1 && j == 0) {
+                        area.setCell(i - 1, j + 1, Area.CellsType.MISS);
+                    }
+
+                    if (i == 0 && j == Area.AREA_SIZE - 1) {
+                        area.setCell(i + 1, j - 1, Area.CellsType.MISS);
+                    }
+
+                    if (i == Area.AREA_SIZE - 1 && j == Area.AREA_SIZE - 1) {
+                        area.setCell(i - 1, j - 1, Area.CellsType.MISS);
+                    }
+
+
+
+
+                    if (i  == Area.AREA_SIZE - 1 && j > 0 && j < Area.AREA_SIZE - 1) {
+                        area.setCell(i - 1, j - 1, Area.CellsType.MISS);
+                        area.setCell(i - 1, j - 1, Area.CellsType.MISS);
+                    }
+                }
+            }
+        }
     }
 }
