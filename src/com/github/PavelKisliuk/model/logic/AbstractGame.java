@@ -6,4 +6,6 @@ public abstract class AbstractGame {
 	public enum Way {
 		NORTH, EAST, SOUTH, WEST
 	}
+
+	public abstract Area getOpponentArea();
 }
