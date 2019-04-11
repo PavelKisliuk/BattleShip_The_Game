@@ -1,6 +1,7 @@
 package com.github.PavelKisliuk.controller;
 
 import com.github.PavelKisliuk.model.data.Area;
+import com.github.PavelKisliuk.model.logic.AbstractGame;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,6 +26,7 @@ public class MainController {
 
 	private AddShipsWindowController ASWController;
 
+	AbstractGame game;
 	private Area playerArea;
 	private Area opponentAre;
 
@@ -173,5 +175,9 @@ public class MainController {
 		goFirstCheckBox.setVisible(true);
 		newGameButton.setVisible(false);
 		gameInfoLabel.setText("Click start to play.");
+	}
+
+	public void setGame(AbstractGame game) {
+		this.game = game;
 	}
 }
