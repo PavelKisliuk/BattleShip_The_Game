@@ -26,6 +26,7 @@ public class MainController {
 	private AddShipsWindowController ASWController;
 
 	private Area playerArea;
+	private Area opponentAre;
 
 	@FXML
 	private GridPane playerGridPane;
