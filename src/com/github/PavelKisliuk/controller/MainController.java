@@ -117,7 +117,7 @@ public class MainController {
 	//---------------------------------------------------------------
 	private void startButtonOnAction() {
 		setPlayerArea();
-
+		opponentArea = game.getOpponentArea();
 	}
 
 	private void setPlayerArea() {

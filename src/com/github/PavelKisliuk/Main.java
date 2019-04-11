@@ -85,9 +85,10 @@ public class Main extends Application {
 		if (CGWController.getPvPGame() == null) {
 			Platform.exit();
 		} else if (CGWController.getPvPGame()) {
-			this.mainController.setGame(new GameVsComputer());
-		} else {
 			this.mainController.setGame(null);
+
+		} else {
+			this.mainController.setGame(new GameVsComputer());
 		}
 	}
 }
