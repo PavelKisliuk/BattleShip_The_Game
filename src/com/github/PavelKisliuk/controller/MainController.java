@@ -62,9 +62,11 @@ public class MainController {
 		game.playerGo(opponentArea, row, column);
 		switch (opponentArea.getCell(row, column)) {
 			case MISS:
+			case EMPTY:
 				image.setImage(MISSED);
 				break;
 			case BEATEN:
+			case SHIP:
 				image.setImage(WOUNDED);
 				break;
 			case KILLED:
