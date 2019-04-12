@@ -691,7 +691,7 @@
       <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <ProgressBar fx:id="timeoutProgressBar" prefHeight="20.0" prefWidth="200.0" visible="false" />
-            <Label fx:id="goesInfoLabel" alignment="CENTER" prefHeight="20.0" prefWidth="300.0" text="Label">
+            <Label fx:id="goesInfoLabel" alignment="CENTER" prefHeight="20.0" prefWidth="300.0">
                <font>
                   <Font size="14.0" />
                </font>
