@@ -306,4 +306,9 @@ public enum  Checker {
         return counterFourCellShip == 0 && counterThreeCellShip == 0 && counterTwoCellShip == 0 && counterOneCellShip == 0;
     }
 
+    boolean isShipAlive(Area area, int shipNumber) {
+        Ship[] shipsGroup = area.getShips();
+        return area.getCell(shipsGroup[shipNumber].getRow()[0], shipsGroup[shipNumber].getColumn()[0]) != Area.CellsType.KILLED;
+    }
+
 }
