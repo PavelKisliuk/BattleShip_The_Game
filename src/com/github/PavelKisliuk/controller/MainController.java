@@ -2,15 +2,13 @@ package com.github.PavelKisliuk.controller;
 
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.logic.AbstractGame;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -68,7 +66,7 @@ public class MainController {
 
 		if(!(game.playerGo(opponentArea, row, column))) {
 			redisplay(opponentGridPane, opponentArea);
-			opponentGoConfigure();
+			new Thread(this::opponentGoConfigure).start();
 		}
 		redisplay(opponentGridPane, opponentArea);
 	}
@@ -193,11 +191,25 @@ public class MainController {
 
 	private void opponentGoConfigure() {
 		opponentGridPane.setDisable(true);
-		while (game.opponentGo(playerArea)) {
-			redisplay(playerGridPane, playerArea);
+		timeoutProgressBar.setVisible(true);
+		try {
+			Thread.sleep(2000);
+			timeoutProgressBar.setVisible(false);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		redisplay(playerGridPane, playerArea);
-		opponentGridPane.setDisable(false);
+
+		if(game.opponentGo(playerArea)) {
+			Platform.runLater(() -> {
+				redisplay(playerGridPane, playerArea);
+			});
+			new Thread(this::opponentGoConfigure).start();
+		} else {
+			Platform.runLater(() -> {
+				redisplay(playerGridPane, playerArea);
+			});
+			opponentGridPane.setDisable(false);
+		}
 	}
 
 	private void redisplay(GridPane gridPane, Area area) {
