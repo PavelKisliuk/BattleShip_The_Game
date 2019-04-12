@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -49,6 +50,12 @@ public class MainController {
 	private Button newGameButton;
 
 	@FXML
+	private ProgressBar timeoutProgressBar;
+
+	@FXML
+	private Label goesInfoLabel;
+
+	@FXML
 	private Label gameInfoLabel;
 
 	@FXML
@@ -59,21 +66,11 @@ public class MainController {
 		if (row == null) row = 0;
 		if (column == null) column = 0;
 
-		game.playerGo(opponentArea, row, column);
-		switch (opponentArea.getCell(row, column)) {
-			case MISS:
-			case EMPTY:
-				image.setImage(MISSED);
-				break;
-			case BEATEN:
-			case SHIP:
-				image.setImage(WOUNDED);
-				break;
-			case KILLED:
-				image.setImage(KILLED);
-				break;
+		if(!(game.playerGo(opponentArea, row, column))) {
+			redisplay(opponentGridPane, opponentArea);
+			opponentGoConfigure();
 		}
-		image.setDisable(true);
+		redisplay(opponentGridPane, opponentArea);
 	}
 
 	@FXML
@@ -139,6 +136,8 @@ public class MainController {
 	//---------------------------------------------------------------
 	private void startButtonOnAction() {
 		setPlayerArea();
+		coverOpponentArea();
+		setWindowElementsOnStartButton();
 		opponentArea = game.getOpponentArea();
 		if (!(game.playerGoFirst())) {
 			opponentGoConfigure();
@@ -153,8 +152,6 @@ public class MainController {
 		if (!(ASWController.isCancel())) {
 			playerArea = ASWController.getArea();
 			setShipsOnPlayerArea();
-			coverOpponentArea();
-			setWindowElementsOnStartButton();
 		} else {
 			gameInfoLabel.setText("Ships not arrange! Try again.");
 		}
@@ -197,7 +194,7 @@ public class MainController {
 	private void opponentGoConfigure() {
 		opponentGridPane.setDisable(true);
 		while (game.opponentGo(playerArea)) {
-
+			redisplay(playerGridPane, playerArea);
 		}
 		redisplay(playerGridPane, playerArea);
 		opponentGridPane.setDisable(false);
@@ -211,15 +208,19 @@ public class MainController {
 				if (row == null) row = 0;
 				if (column == null) column = 0;
 
-				switch (playerArea.getCell(row, column)) {
+
+				switch (area.getCell(row, column)) {
 					case MISS:
 						((ImageView) n).setImage(MISSED);
+						n.setDisable(true);
 						break;
 					case BEATEN:
 						((ImageView) n).setImage(WOUNDED);
+						n.setDisable(true);
 						break;
 					case KILLED:
 						((ImageView) n).setImage(KILLED);
+						n.setDisable(true);
 						break;
 				}
 			}
