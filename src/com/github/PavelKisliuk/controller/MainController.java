@@ -1,18 +1,24 @@
 package com.github.PavelKisliuk.controller;
 
 import com.github.PavelKisliuk.model.data.Area;
+import com.github.PavelKisliuk.model.data.Ship;
 import com.github.PavelKisliuk.model.logic.AbstractGame;
+import com.github.PavelKisliuk.util.Checker;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -26,7 +32,17 @@ public class MainController {
 	private final Image MISSED = new Image("com/github/PavelKisliuk/image/missed.jpg");
 	private final Image KILLED = new Image("com/github/PavelKisliuk/image/killed.jpg");
 	private final Image LAST = new Image("com/github/PavelKisliuk/image/last.jpg");
-
+	//---------------------------------------------------------------
+	private final Image ONE_LIVE = new Image("com/github/PavelKisliuk/image/ship/live/one.jpg");
+	private final Image TWO_LIVE = new Image("com/github/PavelKisliuk/image/ship/live/two.jpg");
+	private final Image THREE_LIVE = new Image("com/github/PavelKisliuk/image/ship/live/three.jpg");
+	private final Image FOUR_LIVE = new Image("com/github/PavelKisliuk/image/ship/live/four.jpg");
+	//---------------------------------------------------------------
+	private final Image ONE_KILLED = new Image("com/github/PavelKisliuk/image/ship/killed/one.jpg");
+	private final Image TWO_KILLED = new Image("com/github/PavelKisliuk/image/ship/killed/two.jpg");
+	private final Image THREE_KILLED = new Image("com/github/PavelKisliuk/image/ship/killed/three.jpg");
+	private final Image FOUR_KILLED = new Image("com/github/PavelKisliuk/image/ship/killed/four.jpg");
+	//---------------------------------------------------------------
 	private AddShipsWindowController ASWController;
 
 	private AbstractGame game;
@@ -58,6 +74,9 @@ public class MainController {
 	private Label gameInfoLabel;
 
 	@FXML
+	private VBox rightVBox;
+
+	@FXML
 	void imageViewsOnMouseClicked(MouseEvent event) {
 		ImageView image = (ImageView) event.getTarget();
 		Integer row = GridPane.getRowIndex(image);
@@ -65,11 +84,12 @@ public class MainController {
 		if (row == null) row = 0;
 		if (column == null) column = 0;
 
-		if(!(game.playerGo(opponentArea, row, column))) {
+		if (!(game.playerGo(opponentArea, row, column))) {
 			redisplay(opponentGridPane, opponentArea);
 			goesInfoLabel.setText("Computer go.");
 			new Thread(this::opponentGoConfigure).start();
 		}
+		setKilled();
 		redisplay(opponentGridPane, opponentArea);
 	}
 
@@ -202,7 +222,7 @@ public class MainController {
 			e.printStackTrace();
 		}
 
-		if(game.opponentGo(playerArea)) {
+		if (game.opponentGo(playerArea)) {
 			Platform.runLater(() -> redisplay(playerGridPane, playerArea));
 			new Thread(this::opponentGoConfigure).start();
 		} else {
@@ -270,6 +290,36 @@ public class MainController {
 		goFirstCheckBox.setVisible(true);
 		newGameButton.setVisible(false);
 		gameInfoLabel.setText("Click start to play.");
+	}
+
+	private void setKilled() {
+		int counter = 0;
+		for (Node n : rightVBox.getChildren()) {
+			if (n instanceof ImageView &&
+					!Checker.INSTANCE.isShipAlive(opponentArea, counter++)) {
+				ImageView image = (ImageView) n;
+				switch(counter - 1){
+					case 0:
+						image.setImage(FOUR_KILLED);
+						break;
+					case 1:
+					case 2:
+						image.setImage(THREE_KILLED);
+						break;
+					case 3:
+					case 4:
+					case 5:
+						image.setImage(TWO_KILLED);
+						break;
+					case 6:
+					case 7:
+					case 8:
+					case 9:
+						image.setImage(ONE_KILLED);
+						break;
+				}
+			}
+		}
 	}
 
 	public void setGame(AbstractGame game) {
