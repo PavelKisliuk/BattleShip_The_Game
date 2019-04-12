@@ -58,36 +58,44 @@ public class GameVsComputer extends AbstractGame {
 
                     if (i < Area.AREA_SIZE - 2 && area.getCell(i + 1, j) == Area.CellsType.BEATEN
                             && area.getCell(i + 2, j) == Area.CellsType.BEATEN) {
-                        if (i > 0 && area.getCell(i - 1, j) != Area.CellsType.NEIGHBOR) {
+                        if (i > 0 && area.getCell(i - 1, j) != Area.CellsType.MISS
+                                && area.getCell(i - 1, j) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i - 1, j, area.getCell(i - 1, j)));
                         }
-                        if (i < Area.AREA_SIZE - 3) {
+                        if (i < Area.AREA_SIZE - 3 && area.getCell(i + 3, j) != Area.CellsType.MISS
+                                && area.getCell(i + 3, j) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i + 3, j, area.getCell(i + 3, j)));
                         }
 
                     } else if (j < Area.AREA_SIZE - 2 && area.getCell(i, j + 1) == Area.CellsType.BEATEN
                             && area.getCell(i, j + 2) == Area.CellsType.BEATEN) {
-                        if (j > 0) {
+                        if (j > 0 && area.getCell(i, j - 1) != Area.CellsType.MISS
+                                && area.getCell(i, j - 1) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i, j - 1, area.getCell(i, j - 1)));
                         }
-                        if (j < Area.AREA_SIZE - 3) {
+                        if (j < Area.AREA_SIZE - 3 && area.getCell(i, j + 3) != Area.CellsType.MISS
+                                && area.getCell(i, j + 3) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i, j + 3, area.getCell(i, j + 3)));
                         }
 
 
                     } else if (i < Area.AREA_SIZE - 1 && area.getCell(i + 1, j) == Area.CellsType.BEATEN) {
-                        if (i > 0) {
+                        if (i > 0 && area.getCell(i - 1, j) != Area.CellsType.MISS
+                                && area.getCell(i - 1, j) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i - 1, j, area.getCell(i - 1, j)));
                         }
-                        if (i < Area.AREA_SIZE - 2) {
+                        if (i < Area.AREA_SIZE - 2 && area.getCell(i + 2, j) != Area.CellsType.MISS
+                                && area.getCell(i + 2, j) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i + 2, j, area.getCell(i + 2, j)));
                         }
 
                     } else if (j < Area.AREA_SIZE - 1 && area.getCell(i, j + 1) == Area.CellsType.BEATEN) {
-                        if (j > 0) {
+                        if (j > 0 && area.getCell(i, j - 1) != Area.CellsType.MISS
+                                && area.getCell(i, j - 1) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i, j - 1, area.getCell(i, j - 1)));
                         }
-                        if (j < Area.AREA_SIZE - 2) {
+                        if (j < Area.AREA_SIZE - 2 && area.getCell(i, j + 2) != Area.CellsType.MISS
+                                && area.getCell(i, j + 2) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i, j + 2, area.getCell(i, j + 2)));
                         }
 
@@ -96,25 +104,29 @@ public class GameVsComputer extends AbstractGame {
 
                         if (i < Area.AREA_SIZE - 1 && area.getCell(i + 1, j) != Area.CellsType.BEATEN
                                 && area.getCell(i + 1, j) != Area.CellsType.KILLED
-                                && area.getCell(i + 1, j) != Area.CellsType.MISS) {
+                                && area.getCell(i + 1, j) != Area.CellsType.MISS
+                                && area.getCell(i + 1, j) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i + 1, j, area.getCell(i + 1, j)));
                         }
 
                         if (i > 0 && area.getCell(i - 1, j) != Area.CellsType.BEATEN
                                 && area.getCell(i - 1, j) != Area.CellsType.KILLED
-                                && area.getCell(i - 1, j) != Area.CellsType.MISS) {
+                                && area.getCell(i - 1, j) != Area.CellsType.MISS
+                                && area.getCell(i - 1, j) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i - 1, j, area.getCell(i - 1, j)));
                         }
 
                         if (j < Area.AREA_SIZE - 1 && area.getCell(i, j + 1) != Area.CellsType.BEATEN
                                 && area.getCell(i, j + 1) != Area.CellsType.KILLED
-                                && area.getCell(i, j + 1) != Area.CellsType.MISS) {
+                                && area.getCell(i, j + 1) != Area.CellsType.MISS
+                                && area.getCell(i, j + 1) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i, j + 1, area.getCell(i, j + 1)));
                         }
 
                         if (j > 0 && area.getCell(i, j - 1) != Area.CellsType.BEATEN
                                 && area.getCell(i, j - 1) != Area.CellsType.KILLED
-                                && area.getCell(i, j - 1) != Area.CellsType.MISS) {
+                                && area.getCell(i, j - 1) != Area.CellsType.MISS
+                                && area.getCell(i, j - 1) != Area.CellsType.LAST) {
                             huntinglist.add(new Cell(i, j - 1, area.getCell(i, j - 1)));
                         }
                     }
@@ -124,7 +136,8 @@ public class GameVsComputer extends AbstractGame {
                 }
 
                 if (area.getCell(i, j) != Area.CellsType.BEATEN && area.getCell(i, j) != Area.CellsType.KILLED
-                        && area.getCell(i, j) != Area.CellsType.MISS && area.getCell(i, j) != Area.CellsType.NEIGHBOR) {
+                        && area.getCell(i, j) != Area.CellsType.MISS && area.getCell(i, j) != Area.CellsType.NEIGHBOR
+                        && area.getCell(i, j) != Area.CellsType.LAST) {
                     cellsList.add(new Cell(i, j, area.getCell(i, j)));
                 }
             }

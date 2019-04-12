@@ -22,7 +22,17 @@ public abstract class AbstractGame {
     public boolean playerGo(Area area, int row, int column) {
         boolean result = false;
         AreaArranger arranger = AreaArranger.INSTANCE;
+
+        for (int i = 0; i < area.length(); i++) {
+            for (int j = 0; j < area.width(); j++) {
+                if (area.getCell(i, j) == Area.CellsType.LAST) {
+                    area.setCell(i, j, Area.CellsType.MISS);
+                }
+            }
+        }
+
         shoot(area, row, column);
+
         if (area.getCell(row, column) == Area.CellsType.BEATEN) {
             ringBeatenDiagonalsWithMiss(area);
             for (Ship ship : area.getShips()) {
@@ -34,6 +44,7 @@ public abstract class AbstractGame {
             }
             result = true;
         }
+
         for (int i = 0; i < area.length(); i++) {
             for (int j = 0; j < area.width(); j++) {
                 if (arranger.isCellContactWithCellType(area, i, j, Area.CellsType.KILLED)
@@ -61,8 +72,8 @@ public abstract class AbstractGame {
 
     private void shoot(Area area, int i, int j) {
         if (area.getCell(i, j) == Area.CellsType.EMPTY) {
-            logger.debug("shoot in cell (" + i + ", " + j + ") MISSED");
-            area.setCell(i, j, Area.CellsType.MISS);
+            logger.debug("shoot in cell (" + i + ", " + j + ") LAST_MISSED");
+            area.setCell(i, j, Area.CellsType.LAST);
         } else if (area.getCell(i, j) == Area.CellsType.SHIP) {
             logger.debug("shoot in cell (" + i + ", " + j + ") BEATEN");
             area.setCell(i, j, Area.CellsType.BEATEN);

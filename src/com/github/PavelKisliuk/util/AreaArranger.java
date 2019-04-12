@@ -54,7 +54,7 @@ public enum AreaArranger {
 				}
 			}
 		}
-		logger.debug(Area.CellsType.NEIGHBOR + " changed to " + Area.CellsType.EMPTY);
+		logger.debug(Area.CellsType.NEIGHBOR + "'s changed to " + Area.CellsType.EMPTY + "'s");
 	}
 
 	private boolean isSuited(Area area, Ship ship) {

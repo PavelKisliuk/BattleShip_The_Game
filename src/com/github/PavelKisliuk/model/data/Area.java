@@ -139,6 +139,8 @@ public class Area {
                     str.append("b ");
                 } else if (cellsTypes[i][j] == CellsType.KILLED) {
                     str.append("k ");
+                } else if (cellsTypes[i][j] == CellsType.LAST) {
+                    str.append("L ");
                 } else {
                     str.append("@ ");
                 }
