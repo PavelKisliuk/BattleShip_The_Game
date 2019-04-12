@@ -25,6 +25,7 @@ public class MainController {
 	private final Image WOUNDED = new Image("com/github/PavelKisliuk/image/wounded.jpg");
 	private final Image MISSED = new Image("com/github/PavelKisliuk/image/missed.jpg");
 	private final Image KILLED = new Image("com/github/PavelKisliuk/image/killed.jpg");
+	private final Image LAST = new Image("com/github/PavelKisliuk/image/last.jpg");
 
 	private AddShipsWindowController ASWController;
 
@@ -66,6 +67,7 @@ public class MainController {
 
 		if(!(game.playerGo(opponentArea, row, column))) {
 			redisplay(opponentGridPane, opponentArea);
+			goesInfoLabel.setText("Computer go.");
 			new Thread(this::opponentGoConfigure).start();
 		}
 		redisplay(opponentGridPane, opponentArea);
@@ -138,7 +140,8 @@ public class MainController {
 		setWindowElementsOnStartButton();
 		opponentArea = game.getOpponentArea();
 		if (!(game.playerGoFirst())) {
-			opponentGoConfigure();
+			goesInfoLabel.setText("Computer go.");
+			new Thread(this::opponentGoConfigure).start();
 		}
 	}
 
@@ -200,13 +203,12 @@ public class MainController {
 		}
 
 		if(game.opponentGo(playerArea)) {
-			Platform.runLater(() -> {
-				redisplay(playerGridPane, playerArea);
-			});
+			Platform.runLater(() -> redisplay(playerGridPane, playerArea));
 			new Thread(this::opponentGoConfigure).start();
 		} else {
 			Platform.runLater(() -> {
 				redisplay(playerGridPane, playerArea);
+				goesInfoLabel.setText("You go.");
 			});
 			opponentGridPane.setDisable(false);
 		}
@@ -222,6 +224,10 @@ public class MainController {
 
 
 				switch (area.getCell(row, column)) {
+					case LAST:
+						((ImageView) n).setImage(LAST);
+						n.setDisable(true);
+						break;
 					case MISS:
 						((ImageView) n).setImage(MISSED);
 						n.setDisable(true);
