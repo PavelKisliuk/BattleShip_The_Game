@@ -8,6 +8,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -676,6 +677,12 @@
                   <Font size="14.0" />
                </font>
             </Button>
+            <Label text="Game speed:">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Slider fx:id="gameSpeedSlider" majorTickUnit="10.0" max="2000.0" min="500.0" minorTickCount="0" orientation="VERTICAL" prefHeight="70.0" prefWidth="20.0" rotate="180.0" snapToTicks="true" value="2000.0" />
          </children>
          <BorderPane.margin>
             <Insets />
@@ -686,9 +693,12 @@
       </VBox>
    </left>
    <right>
-      <VBox fx:id="rightVBox" alignment="CENTER_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="rightVBox" alignment="CENTER_RIGHT" spacing="5.0" visible="false" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Label" />
+            <Label text="Ships:">
+               <font>
+                  <Font size="12.0" />
+               </font></Label>
             <ImageView fitHeight="25.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../image/ship/live/four.jpg" />

@@ -9,10 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -64,6 +61,9 @@ public class MainController {
 	private Button newGameButton;
 
 	@FXML
+	private Slider gameSpeedSlider;
+
+	@FXML
 	private ProgressBar timeoutProgressBar;
 
 	@FXML
@@ -92,6 +92,7 @@ public class MainController {
 			redisplay(opponentGridPane, opponentArea);
 			if (game.isWin(opponentArea)) {
 				goesInfoLabel.setText("You won!!!");
+				gameInfoLabel.setText("Click New game.");
 				opponentGridPane.setDisable(true);
 			}
 		}
@@ -115,6 +116,14 @@ public class MainController {
 	void initialize() {
 		startButton.setOnAction(actionEvent -> startButtonOnAction());
 		newGameButton.setOnAction(actionEvent -> newGameOnAction());
+		gameSpeedSlider.valueProperty().addListener((obs, oldval, newVal) -> {
+			int timeOfThinking = 2000;
+			if (oldval.doubleValue() == timeOfThinking) {
+				gameSpeedSlider.setValue(gameSpeedSlider.getMin());
+			} else {
+				gameSpeedSlider.setValue(gameSpeedSlider.getMax());
+			}
+		});
 	}
 
 	private void openWindow(String path, String title) {
@@ -213,14 +222,17 @@ public class MainController {
 		startButton.setVisible(false);
 		goFirstCheckBox.setVisible(false);
 		newGameButton.setVisible(true);
+		rightVBox.setVisible(true);
 		gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
 	}
 
 	private void opponentGoConfigure() {
 		opponentGridPane.setDisable(true);
-		timeoutProgressBar.setVisible(true);
+		if((int)gameSpeedSlider.getValue() == 2000) {
+			timeoutProgressBar.setVisible(true);
+		}
 		try {
-			Thread.sleep(2000);
+			Thread.sleep((int)gameSpeedSlider.getValue());
 			timeoutProgressBar.setVisible(false);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -231,6 +243,7 @@ public class MainController {
 				Platform.runLater(() -> {
 					redisplay(playerGridPane, playerArea);
 					goesInfoLabel.setText("Computer won!!!");
+					gameInfoLabel.setText("Click New game.");
 					showOpponentShips();
 				});
 			} else {
@@ -325,6 +338,8 @@ public class MainController {
 		startButton.setVisible(true);
 		goFirstCheckBox.setVisible(true);
 		newGameButton.setVisible(false);
+		rightVBox.setVisible(false);
+		goesInfoLabel.setText(null);
 		gameInfoLabel.setText("Click start to play.");
 	}
 
