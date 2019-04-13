@@ -1,7 +1,6 @@
 package com.github.PavelKisliuk.controller;
 
 import com.github.PavelKisliuk.model.data.Area;
-import com.github.PavelKisliuk.model.data.Ship;
 import com.github.PavelKisliuk.model.logic.AbstractGame;
 import com.github.PavelKisliuk.util.Checker;
 import javafx.application.Platform;
@@ -91,7 +90,7 @@ public class MainController {
 		} else {
 			setOpponentKilled();
 			redisplay(opponentGridPane, opponentArea);
-			if(game.isWin(opponentArea)) {
+			if (game.isWin(opponentArea)) {
 				goesInfoLabel.setText("You won!!!");
 				opponentGridPane.setDisable(true);
 			}
@@ -221,17 +220,18 @@ public class MainController {
 		opponentGridPane.setDisable(true);
 		timeoutProgressBar.setVisible(true);
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(20);
 			timeoutProgressBar.setVisible(false);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		if (game.opponentGo(playerArea)) {
-			if(game.isWin(playerArea)) {
+			if (game.isWin(playerArea)) {
 				Platform.runLater(() -> {
 					redisplay(playerGridPane, playerArea);
 					goesInfoLabel.setText("Computer won!!!");
+					showOpponentShips();
 				});
 			} else {
 				Platform.runLater(() -> redisplay(playerGridPane, playerArea));
@@ -243,6 +243,26 @@ public class MainController {
 				goesInfoLabel.setText("You go.");
 			});
 			opponentGridPane.setDisable(false);
+		}
+	}
+
+	private void showOpponentShips() {
+		for (Node n : opponentGridPane.getChildren()) {
+			if (n instanceof ImageView) {
+				Integer row = GridPane.getRowIndex(n);
+				Integer column = GridPane.getColumnIndex(n);
+				if (row == null) row = 0;
+				if (column == null) column = 0;
+
+				switch (opponentArea.getCell(row, column)) {
+					case EMPTY:
+						((ImageView) n).setImage(null);
+						break;
+					case SHIP:
+						((ImageView) n).setImage(SHIP);
+						break;
+				}
+			}
 		}
 	}
 
@@ -314,7 +334,7 @@ public class MainController {
 			if (n instanceof ImageView &&
 					!Checker.INSTANCE.isShipAlive(opponentArea, counter++)) {
 				ImageView image = (ImageView) n;
-				switch(counter - 1){
+				switch (counter - 1) {
 					case 0:
 						image.setImage(FOUR_KILLED);
 						break;
@@ -343,7 +363,7 @@ public class MainController {
 		for (Node n : rightVBox.getChildren()) {
 			if (n instanceof ImageView) {
 				ImageView image = (ImageView) n;
-				switch(counter++){
+				switch (counter++) {
 					case 0:
 						image.setImage(FOUR_LIVE);
 						break;
