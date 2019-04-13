@@ -163,7 +163,7 @@ public class MainController {
 		coverOpponentArea();
 		setWindowElementsOnStartButton();
 		opponentArea = game.getOpponentArea();
-		if (!(game.playerGoFirst())) {
+		if (!(goFirstCheckBox.isSelected()) && !(game.playerGoFirst())) {
 			goesInfoLabel.setText("Computer go.");
 			new Thread(this::opponentGoConfigure).start();
 		}
@@ -220,7 +220,7 @@ public class MainController {
 		opponentGridPane.setDisable(true);
 		timeoutProgressBar.setVisible(true);
 		try {
-			Thread.sleep(20);
+			Thread.sleep(2000);
 			timeoutProgressBar.setVisible(false);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
