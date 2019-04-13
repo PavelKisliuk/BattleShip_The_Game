@@ -88,9 +88,14 @@ public class MainController {
 			redisplay(opponentGridPane, opponentArea);
 			goesInfoLabel.setText("Computer go.");
 			new Thread(this::opponentGoConfigure).start();
+		} else {
+			setOpponentKilled();
+			redisplay(opponentGridPane, opponentArea);
+			if(game.isWin(opponentArea)) {
+				goesInfoLabel.setText("You won!!!");
+				opponentGridPane.setDisable(true);
+			}
 		}
-		setKilled();
-		redisplay(opponentGridPane, opponentArea);
 	}
 
 	@FXML
@@ -223,8 +228,15 @@ public class MainController {
 		}
 
 		if (game.opponentGo(playerArea)) {
-			Platform.runLater(() -> redisplay(playerGridPane, playerArea));
-			new Thread(this::opponentGoConfigure).start();
+			if(game.isWin(playerArea)) {
+				Platform.runLater(() -> {
+					redisplay(playerGridPane, playerArea);
+					goesInfoLabel.setText("Computer won!!!");
+				});
+			} else {
+				Platform.runLater(() -> redisplay(playerGridPane, playerArea));
+				new Thread(this::opponentGoConfigure).start();
+			}
 		} else {
 			Platform.runLater(() -> {
 				redisplay(playerGridPane, playerArea);
@@ -268,21 +280,25 @@ public class MainController {
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
 	private void newGameOnAction() {
-		for (Node n : opponentGridPane.getChildren()) {
+		setDefaultArea(opponentGridPane);
+		setDefaultArea(playerGridPane);
+
+		setOpponentAlive();
+
+		setWindowElementsOnNewGameButton();
+	}
+
+	private void setDefaultArea(GridPane gridPane) {
+		for (Node n : gridPane.getChildren()) {
 			if (n instanceof ImageView) {
 				ImageView image = (ImageView) n;
 				image.setImage(null);
 				image.setDisable(false);
 			}
 		}
+	}
 
-		for (Node n : playerGridPane.getChildren()) {
-			if (n instanceof ImageView) {
-				ImageView image = (ImageView) n;
-				image.setImage(null);
-			}
-		}
-
+	private void setWindowElementsOnNewGameButton() {
 		opponentGridPane.setGridLinesVisible(false);
 		playerGridPane.setGridLinesVisible(false);
 		opponentGridPane.setDisable(true);
@@ -292,7 +308,7 @@ public class MainController {
 		gameInfoLabel.setText("Click start to play.");
 	}
 
-	private void setKilled() {
+	private void setOpponentKilled() {
 		int counter = 0;
 		for (Node n : rightVBox.getChildren()) {
 			if (n instanceof ImageView &&
@@ -316,6 +332,35 @@ public class MainController {
 					case 8:
 					case 9:
 						image.setImage(ONE_KILLED);
+						break;
+				}
+			}
+		}
+	}
+
+	private void setOpponentAlive() {
+		int counter = 0;
+		for (Node n : rightVBox.getChildren()) {
+			if (n instanceof ImageView) {
+				ImageView image = (ImageView) n;
+				switch(counter++){
+					case 0:
+						image.setImage(FOUR_LIVE);
+						break;
+					case 1:
+					case 2:
+						image.setImage(THREE_LIVE);
+						break;
+					case 3:
+					case 4:
+					case 5:
+						image.setImage(TWO_LIVE);
+						break;
+					case 6:
+					case 7:
+					case 8:
+					case 9:
+						image.setImage(ONE_LIVE);
 						break;
 				}
 			}
