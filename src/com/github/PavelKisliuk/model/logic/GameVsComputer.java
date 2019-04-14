@@ -5,6 +5,7 @@ import com.github.PavelKisliuk.model.data.Cell;
 import com.github.PavelKisliuk.util.RandomAreaArranger;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -153,6 +154,11 @@ public class GameVsComputer extends AbstractGame implements SaveAndLoad {
 
     @Override
     public boolean loadGame(String path, Area playerArea, Area opponentArea) {
+        try(final BufferedReader reader = Files.newBufferedReader(Paths.get(path))) {
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
