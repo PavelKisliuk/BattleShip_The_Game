@@ -169,12 +169,14 @@ public class MainController {
 	//---------------------------------------------------------------
 	private void startButtonOnAction() {
 		setPlayerArea();
-		coverOpponentArea();
-		setWindowElementsOnStartButton();
-		opponentArea = game.getOpponentArea();
-		if (!(goFirstCheckBox.isSelected()) && !(game.playerGoFirst())) {
-			goesInfoLabel.setText("Computer go.");
-			new Thread(this::opponentGoConfigure).start();
+		if (!(ASWController.isCancel())) {
+			coverOpponentArea();
+			setWindowElementsOnStartButton();
+			opponentArea = game.getOpponentArea();
+			if (!(goFirstCheckBox.isSelected()) && !(game.playerGoFirst())) {
+				goesInfoLabel.setText("Computer go.");
+				new Thread(this::opponentGoConfigure).start();
+			}
 		}
 	}
 
