@@ -5,12 +5,17 @@ import com.github.PavelKisliuk.model.data.Cell;
 import com.github.PavelKisliuk.util.RandomAreaArranger;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class GameVsComputer extends AbstractGame {
+public class GameVsComputer extends AbstractGame implements SaveAndLoad {
 
     private static final Logger logger;
 
@@ -145,4 +150,25 @@ public class GameVsComputer extends AbstractGame {
         logger.debug("cells list: " + cellsList);
         return cellsList;
     }
+
+    @Override
+    public boolean loadGame(String path, Area playerArea, Area opponentArea) {
+        return false;
+    }
+
+    @Override
+    public boolean saveGame(String path) {
+        try(final BufferedWriter writer = Files.newBufferedWriter(Paths.get(path))) {
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
+
+interface SaveAndLoad {
+    boolean loadGame(String path, Area playerArea, Area opponentArea);
+    boolean saveGame(final String path);
+}
+
