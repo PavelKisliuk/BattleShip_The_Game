@@ -153,8 +153,9 @@ public class GameVsComputer extends AbstractGame implements SaveAndLoad {
 
     @Override
     public boolean loadGame(String path, Area playerArea, Area opponentArea) {
-        playerArea = gameLoader.loadPlayerArea(path);
-        opponentArea = gameLoader.loadOpponentArea(path);
+
+        playerArea.copy(gameLoader.loadPlayerArea(path));
+        opponentArea.copy(gameLoader.loadOpponentArea(path));
         return true;
     }
 

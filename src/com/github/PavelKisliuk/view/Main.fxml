@@ -11,6 +11,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -634,8 +635,14 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" text="Load F11" />
-                  <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="Save F5" />
+              <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" text="Load F11">
+                     <accelerator>
+                        <KeyCodeCombination alt="ANY" code="F11" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="Save F5">
+                     <accelerator>
+                        <KeyCodeCombination alt="ANY" code="F5" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
                   <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Unsaved exit" />
             </items>
           </Menu>
@@ -685,6 +692,14 @@
                </font>
             </Label>
             <Slider fx:id="gameSpeedSlider" blockIncrement="1500.0" majorTickUnit="1500.0" max="2000.0" min="500.0" minorTickCount="0" orientation="VERTICAL" prefHeight="70.0" prefWidth="20.0" rotate="180.0" snapToTicks="true" value="2000.0" />
+            <ImageView fx:id="saveImageView" fitHeight="23.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../image/save.gif" />
+               </image>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
+            </ImageView>
          </children>
          <BorderPane.margin>
             <Insets />

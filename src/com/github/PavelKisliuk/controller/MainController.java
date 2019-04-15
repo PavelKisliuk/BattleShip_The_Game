@@ -4,6 +4,8 @@ import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.logic.AbstractGame;
 import com.github.PavelKisliuk.model.logic.GameVsComputer;
 import com.github.PavelKisliuk.util.Checker;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -96,6 +99,9 @@ public class MainController {
 	private VBox rightVBox;
 
 	@FXML
+	private ImageView saveImageView;
+
+	@FXML
 	void imageViewsOnMouseClicked(MouseEvent event) {
 		ImageView image = (ImageView) event.getTarget();
 		Integer row = GridPane.getRowIndex(image);
@@ -134,6 +140,8 @@ public class MainController {
 
 	@FXML
 	void initialize() {
+		playerArea = new Area();
+		opponentArea = new Area();
 		startButton.setOnAction(actionEvent -> startButtonOnAction());
 		newGameButton.setOnAction(actionEvent -> newGameOnAction());
 		loadMenuItem.setOnAction(actionEvent -> loadMenuItemOnAction());
@@ -190,8 +198,15 @@ public class MainController {
 
 		if (LWController.getPath() != null) {
 			((GameVsComputer)game).loadGame(LWController.getPath(), playerArea, opponentArea);
+			setDefaultArea(opponentGridPane);
+			setWindowElementsOnStartButton();
+			coverOpponentArea();
+			setOpponentAlive();
+			setShipsOnPlayerArea();
 			redisplay(playerGridPane, playerArea);
 			redisplay(opponentGridPane, opponentArea);
+			goesInfoLabel.setText("Game load. You go.");
+			gameInfoLabel.setText("Game start.");
 		}
 	}
 
@@ -209,6 +224,11 @@ public class MainController {
 		time = time.replaceAll(":", "-");
 		path = String.format("%s%19s%s", path, time, ".dat");
 		((GameVsComputer)game).saveGame(path, playerArea, opponentArea);
+		saveImageView.setVisible(true);
+		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
+				timelineEvent -> saveImageView.setVisible(false)));
+		timeline.play();
+		goesInfoLabel.setText("Game save. You go.");
 	}
 
 	//---------------------------------------------------------------
@@ -218,6 +238,7 @@ public class MainController {
 		if (!(ASWController.isCancel())) {
 			coverOpponentArea();
 			setWindowElementsOnStartButton();
+			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
 			opponentArea = game.getOpponentArea();
 			if (!(goFirstCheckBox.isSelected()) && !(game.playerGoFirst())) {
 				goesInfoLabel.setText("Computer go.");
@@ -249,6 +270,8 @@ public class MainController {
 
 				if (playerArea.getCell(row, column) == Area.CellsType.SHIP) {
 					((ImageView) n).setImage(SHIP);
+				} else {
+					((ImageView) n).setImage(null);
 				}
 			}
 		}
@@ -271,11 +294,16 @@ public class MainController {
 		goFirstCheckBox.setVisible(false);
 		newGameButton.setVisible(true);
 		rightVBox.setVisible(true);
-		gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
+		saveMenuItem.setDisable(false);
 	}
 
 	private void opponentGoConfigure() {
 		opponentGridPane.setDisable(true);
+		loadMenuItem.setDisable(true);
+		saveMenuItem.setDisable(true);
+		exitMenuItem.setDisable(true);
+		anotherGameTypeMenuItem.setDisable(true);
+		aboutMenuItem.setDisable(true);
 		if((int)gameSpeedSlider.getValue() == gameSpeedSlider.getMax()) {
 			timeoutProgressBar.setVisible(true);
 		}
@@ -304,6 +332,11 @@ public class MainController {
 				goesInfoLabel.setText("You go.");
 			});
 			opponentGridPane.setDisable(false);
+			loadMenuItem.setDisable(false);
+			saveMenuItem.setDisable(false);
+			exitMenuItem.setDisable(false);
+			anotherGameTypeMenuItem.setDisable(false);
+			aboutMenuItem.setDisable(false);
 		}
 	}
 
@@ -389,6 +422,7 @@ public class MainController {
 		rightVBox.setVisible(false);
 		goesInfoLabel.setText(null);
 		gameInfoLabel.setText("Click start to play.");
+		saveMenuItem.setDisable(true);
 	}
 
 	private void setOpponentKilled() {
@@ -452,5 +486,10 @@ public class MainController {
 
 	public void setGame(AbstractGame game) {
 		this.game = game;
+		if(this.game instanceof GameVsComputer) {
+			loadMenuItem.setDisable(false);
+			saveMenuItem.setDisable(true);
+			goFirstCheckBox.setSelected(false);
+		}
 	}
 }

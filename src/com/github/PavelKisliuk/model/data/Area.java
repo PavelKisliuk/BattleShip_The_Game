@@ -111,7 +111,9 @@ public class Area {
         for (Ship ship : ships) {
 
             for (int j = 0; j < ship.getHealth(); j++) {
-                this.cellsTypes[ship.getRow()[j]][ship.getColumn()[j]] = CellsType.SHIP;
+                if(this.cellsTypes[ship.getRow()[j]][ship.getColumn()[j]] == CellsType.EMPTY) {
+                    this.cellsTypes[ship.getRow()[j]][ship.getColumn()[j]] = CellsType.SHIP;
+                }
             }
         }
     }
