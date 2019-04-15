@@ -17,9 +17,14 @@ public class InitializerTest {
     public void testInit() {
         Ship ship = Creator.INSTANCE.createShip();
         Initializer.INSTANCE.init(ship, 4, new int[]{1, 2, 3, 4}, new int[]{1, 1, 1, 1});
+        Ship ship1 = Creator.INSTANCE.createShip();
+        Initializer.INSTANCE.init(ship1, 1, new int[]{8}, new int[]{8});
 
         Area area = Creator.INSTANCE.createArea();
         AreaArranger.INSTANCE.arrangeShip(area,ship);
+        AreaArranger.INSTANCE.arrangeShip(area,ship1);
+
+        System.out.println(area);
 
         assertEquals(Area.CellsType.SHIP,area.getCell(1,1));
         assertEquals(Area.CellsType.SHIP,area.getCell(2,1));
