@@ -146,6 +146,7 @@ public class MainController {
 		newGameButton.setOnAction(actionEvent -> newGameOnAction());
 		loadMenuItem.setOnAction(actionEvent -> loadMenuItemOnAction());
 		saveMenuItem.setOnAction(actionEvent -> saveMenuItemOnAction());
+		exitMenuItem.setOnAction(actionEvent -> Platform.exit());
 	}
 
 	private void openWindow(String path, String title) {
@@ -321,6 +322,10 @@ public class MainController {
 					goesInfoLabel.setText("Computer won!!!");
 					gameInfoLabel.setText("Click New game.");
 					showOpponentShips();
+					loadMenuItem.setDisable(false);
+					exitMenuItem.setDisable(false);
+					anotherGameTypeMenuItem.setDisable(false);
+					aboutMenuItem.setDisable(false);
 				});
 			} else {
 				Platform.runLater(() -> redisplay(playerGridPane, playerArea));
