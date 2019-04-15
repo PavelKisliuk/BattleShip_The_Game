@@ -2,6 +2,7 @@ package com.github.PavelKisliuk.controller;
 
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.logic.AbstractGame;
+import com.github.PavelKisliuk.model.logic.GameVsComputer;
 import com.github.PavelKisliuk.util.Checker;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -19,6 +20,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 
 public class MainController {
 	private final Image COVERT = new Image("com/github/PavelKisliuk/image/covert.jpg");
@@ -40,6 +44,7 @@ public class MainController {
 	private final Image FOUR_KILLED = new Image("com/github/PavelKisliuk/image/ship/killed/four.jpg");
 	//---------------------------------------------------------------
 	private AddShipsWindowController ASWController;
+	private LoadWindowController LWController;
 
 	private AbstractGame game;
 	private Area playerArea;
@@ -131,6 +136,8 @@ public class MainController {
 	void initialize() {
 		startButton.setOnAction(actionEvent -> startButtonOnAction());
 		newGameButton.setOnAction(actionEvent -> newGameOnAction());
+		loadMenuItem.setOnAction(actionEvent -> loadMenuItemOnAction());
+		saveMenuItem.setOnAction(actionEvent -> saveMenuItemOnAction());
 	}
 
 	private void openWindow(String path, String title) {
@@ -153,6 +160,9 @@ public class MainController {
 				case "Arrangement of ships":
 					ASWController = fxmlLoader.getController();
 					break;
+				case "Load":
+					LWController = fxmlLoader.getController();
+					break;
 			}
 
 			//modality adjustment
@@ -174,7 +184,31 @@ public class MainController {
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
 	private void loadMenuItemOnAction() {
+		String path = "/com/github/PavelKisliuk/view/LoadWindow.fxml";
+		String title = "Load";
+		openWindow(path, title);
 
+		if (LWController.getPath() != null) {
+			((GameVsComputer)game).loadGame(LWController.getPath(), playerArea, opponentArea);
+			redisplay(playerGridPane, playerArea);
+			redisplay(opponentGridPane, opponentArea);
+		}
+	}
+
+	private void saveMenuItemOnAction() {
+		String path = ("save/");
+		if(!(Files.exists(Path.of(path)))){
+			try {
+				Files.createDirectory(Path.of(path));
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		String time = LocalDateTime.now().toString();
+		time = time.substring(0, 19);
+		time = time.replaceAll(":", "-");
+		path = String.format("%s%19s%s", path, time, ".dat");
+		((GameVsComputer)game).saveGame(path, playerArea, opponentArea);
 	}
 
 	//---------------------------------------------------------------

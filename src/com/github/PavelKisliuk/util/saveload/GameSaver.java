@@ -24,11 +24,11 @@ public class GameSaver {
 
     public void saveGame(String path, Area playerArea, Area opponentArea) {
         try {
-            Files.write(Paths.get(path).getFileName(), playerArea.toString().getBytes());
-            Files.write(Paths.get(path).getFileName(), Arrays.toString(playerArea.getShips()).getBytes(), StandardOpenOption.APPEND);
-            Files.write(Paths.get(path).getFileName(), "\n".getBytes(), StandardOpenOption.APPEND);
-            Files.write(Paths.get(path).getFileName(), opponentArea.toString().getBytes(), StandardOpenOption.APPEND);
-            Files.write(Paths.get(path).getFileName(), Arrays.toString(opponentArea.getShips()).getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get(path), playerArea.toString().getBytes());
+            Files.write(Paths.get(path), Arrays.toString(playerArea.getShips()).getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get(path), "\n".getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get(path), opponentArea.toString().getBytes(), StandardOpenOption.APPEND);
+            Files.write(Paths.get(path), Arrays.toString(opponentArea.getShips()).getBytes(), StandardOpenOption.APPEND);
             logger.debug(playerArea + " and " + opponentArea + " saved successfully");
         } catch (IOException ex) {
             logger.info(ex.getMessage());
