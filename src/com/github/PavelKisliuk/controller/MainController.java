@@ -241,6 +241,7 @@ public class MainController {
 			setWindowElementsOnStartButton();
 			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
 			opponentArea = game.getOpponentArea();
+			goesInfoLabel.setText("You go.");
 			if (!(goFirstCheckBox.isSelected()) && !(game.playerGoFirst())) {
 				goesInfoLabel.setText("Computer go.");
 				new Thread(this::opponentGoConfigure).start();
