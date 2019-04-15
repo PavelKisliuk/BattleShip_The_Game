@@ -46,6 +46,21 @@ public class MainController {
 	private Area opponentArea;
 
 	@FXML
+	private MenuItem loadMenuItem;
+
+	@FXML
+	private MenuItem saveMenuItem;
+
+	@FXML
+	private MenuItem exitMenuItem;
+
+	@FXML
+	private MenuItem anotherGameTypeMenuItem;
+
+	@FXML
+	private MenuItem aboutMenuItem;
+
+	@FXML
 	private GridPane playerGridPane;
 
 	@FXML
@@ -116,14 +131,6 @@ public class MainController {
 	void initialize() {
 		startButton.setOnAction(actionEvent -> startButtonOnAction());
 		newGameButton.setOnAction(actionEvent -> newGameOnAction());
-		gameSpeedSlider.valueProperty().addListener((obs, oldval, newVal) -> {
-			int timeOfThinking = 2000;
-			if (oldval.doubleValue() == timeOfThinking) {
-				gameSpeedSlider.setValue(gameSpeedSlider.getMin());
-			} else {
-				gameSpeedSlider.setValue(gameSpeedSlider.getMax());
-			}
-		});
 	}
 
 	private void openWindow(String path, String title) {
@@ -163,6 +170,11 @@ public class MainController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	//---------------------------------------------------------------
+	//---------------------------------------------------------------
+	private void loadMenuItemOnAction() {
+
 	}
 
 	//---------------------------------------------------------------
@@ -230,7 +242,7 @@ public class MainController {
 
 	private void opponentGoConfigure() {
 		opponentGridPane.setDisable(true);
-		if((int)gameSpeedSlider.getValue() == 2000) {
+		if((int)gameSpeedSlider.getValue() == gameSpeedSlider.getMax()) {
 			timeoutProgressBar.setVisible(true);
 		}
 		try {

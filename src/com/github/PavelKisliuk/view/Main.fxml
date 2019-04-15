@@ -634,17 +634,19 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" text="Load F11" />
+                  <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="Save F5" />
+                  <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Unsaved exit" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem fx:id="anotherGameTypeMenuItem" mnemonicParsing="false" text="Delete" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="About" />
             </items>
           </Menu>
         </menus>
@@ -682,7 +684,7 @@
                   <Font size="13.0" />
                </font>
             </Label>
-            <Slider fx:id="gameSpeedSlider" majorTickUnit="10.0" max="2000.0" min="500.0" minorTickCount="0" orientation="VERTICAL" prefHeight="70.0" prefWidth="20.0" rotate="180.0" snapToTicks="true" value="2000.0" />
+            <Slider fx:id="gameSpeedSlider" blockIncrement="1500.0" majorTickUnit="1500.0" max="2000.0" min="500.0" minorTickCount="0" orientation="VERTICAL" prefHeight="70.0" prefWidth="20.0" rotate="180.0" snapToTicks="true" value="2000.0" />
          </children>
          <BorderPane.margin>
             <Insets />
