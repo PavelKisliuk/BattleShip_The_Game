@@ -35,6 +35,12 @@ public enum Initializer {
             throw new ShipInitializationException("Not correct input data");
         }
 
+        if (health == 1) {
+            ship.setHealth(1);
+            ship.setRow(row);
+            ship.setColumn(column);
+        }
+
         for (int i = 0; i < health - 1; i++) {
             if ((row[i] == row[i + 1] && (column[i] + 1 == column[i + 1] || column[i] - 1 == column[i + 1]))
                     || (column[i] == column[i + 1] && (row[i] + 1 == row[i + 1] || row[i] - 1 == row[i + 1]))) {
@@ -58,6 +64,12 @@ public enum Initializer {
             throw new ShipInitializationException("Not correct input data");
         }
 
+        if (row.length == 1) {
+            ship.setHealth(row.length);
+            ship.setRow(row);
+            ship.setColumn(column);
+        }
+
         for (int i = 0; i < row.length - 1; i++) {
             if ((row[i] == row[i + 1] && (column[i] + 1 == column[i + 1] || column[i] - 1 == column[i + 1]))
                     || (column[i] == column[i + 1] && (row[i] + 1 == row[i + 1] || row[i] - 1 == row[i + 1]))) {
@@ -69,6 +81,7 @@ public enum Initializer {
             }
         }
     }
+
 
     public void initRandom(Ship ship, int health) {
 

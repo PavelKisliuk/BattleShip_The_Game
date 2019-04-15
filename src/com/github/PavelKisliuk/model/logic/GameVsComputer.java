@@ -3,16 +3,12 @@ package com.github.PavelKisliuk.model.logic;
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.data.Cell;
 import com.github.PavelKisliuk.util.RandomAreaArranger;
+import com.github.PavelKisliuk.util.saveload.GameLoader;
+import com.github.PavelKisliuk.util.saveload.GameSaver;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -23,6 +19,9 @@ public class GameVsComputer extends AbstractGame implements SaveAndLoad {
     static {
         logger = Logger.getLogger(GameVsComputer.class);
     }
+
+    private GameSaver gameSaver = new GameSaver();
+    private GameLoader gameLoader = new GameLoader();
 
     @Override
     public Area getOpponentArea() {
@@ -154,27 +153,20 @@ public class GameVsComputer extends AbstractGame implements SaveAndLoad {
 
     @Override
     public boolean loadGame(String path, Area playerArea, Area opponentArea) {
-        try(final BufferedReader reader = Files.newBufferedReader(Paths.get(path))) {
-
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+        playerArea = gameLoader.loadPlayerArea(path);
+        opponentArea = gameLoader.loadOpponentArea(path);
+        return true;
     }
 
     @Override
-    public boolean saveGame(String path) {
-        try(final BufferedWriter writer = Files.newBufferedWriter(Paths.get(path))) {
-
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+    public boolean saveGame(String path, Area playerArea, Area opponentArea) {
+        gameSaver.saveGame(path, playerArea, opponentArea);
+        return true;
     }
 }
 
 interface SaveAndLoad {
     boolean loadGame(String path, Area playerArea, Area opponentArea);
-    boolean saveGame(final String path);
+    boolean saveGame(final String path, Area playerArea, Area opponentArea);
 }
 
