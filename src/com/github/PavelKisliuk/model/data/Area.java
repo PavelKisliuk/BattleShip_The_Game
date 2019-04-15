@@ -124,6 +124,11 @@ public class Area {
         ships[ships.length - 1] = ship;
     }
 
+    public void copy(Area area) {
+        this.cellsTypes = area.cellsTypes;
+        this.ships = area.ships;
+    }
+
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
