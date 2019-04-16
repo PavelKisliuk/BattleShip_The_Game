@@ -39,7 +39,7 @@
             </VBox>
             <BorderPane>
                <top>
-                  <HBox BorderPane.alignment="CENTER">
+                  <HBox spacing="17.0" BorderPane.alignment="CENTER">
                         <Label text="A">
                            <padding>
                               <Insets left="25.0" />
@@ -48,7 +48,7 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="15.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                         <Label text="B">
@@ -56,7 +56,7 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="16.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                         <Label text="C">
@@ -64,7 +64,7 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="17.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                         <Label text="D">
@@ -72,7 +72,7 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="15.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                         <Label text="E">
@@ -80,7 +80,7 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="16.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                         <Label text="F">
@@ -88,7 +88,7 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="18.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                         <Label text="G">
@@ -96,7 +96,7 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="15.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                         <Label text="H">
@@ -104,7 +104,7 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="15.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                         <Label text="I">
@@ -112,7 +112,7 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="21.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                         <Label text="J">
@@ -120,19 +120,19 @@
                               <Font size="14.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="20.0" top="5.0" />
+                              <Insets />
                            </HBox.margin>
                         </Label>
                   </HBox>
                </top>
                <left>
-                  <VBox BorderPane.alignment="CENTER">
+                  <VBox spacing="5.0" BorderPane.alignment="CENTER">
                         <Label text="0">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="1.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                         <Label text="1">
@@ -140,7 +140,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                         <Label text="2">
@@ -148,7 +148,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                         <Label text="3">
@@ -156,7 +156,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                         <Label text="4">
@@ -164,7 +164,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                         <Label text="5">
@@ -172,7 +172,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                         <Label text="6">
@@ -180,7 +180,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                         <Label text="7">
@@ -188,7 +188,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                         <Label text="8">
@@ -196,7 +196,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                         <Label text="9">
@@ -204,11 +204,11 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets right="10.0" top="5.0" />
+                              <Insets />
                            </VBox.margin>
                         </Label>
                      <BorderPane.margin>
-                        <Insets left="8.0" />
+                        <Insets right="5.0" />
                      </BorderPane.margin>
                   </VBox>
                </left>
