@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import java.util.Arrays;
 
 
-public class Area {
+public class Area{
 
     private static final Logger logger;
 

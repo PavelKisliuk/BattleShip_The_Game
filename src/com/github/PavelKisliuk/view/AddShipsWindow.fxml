@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.PavelKisliuk.controller.AddShipsWindowController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.PavelKisliuk.controller.AddShipsWindowController">
       <Button fx:id="automaticArrangementButton" mnemonicParsing="false" text="Automatic arrangement">
          <font>
             <Font size="14.0" />
@@ -126,7 +126,7 @@
                   </HBox>
                </top>
                <left>
-                  <VBox spacing="5.0" BorderPane.alignment="CENTER">
+                  <VBox spacing="7.4" BorderPane.alignment="CENTER">
                         <Label text="0">
                            <font>
                               <Font size="14.0" />

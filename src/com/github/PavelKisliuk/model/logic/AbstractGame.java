@@ -145,9 +145,6 @@ public abstract class AbstractGame {
                         area.setCell(i - 1, j - 1, Area.CellsType.MISS);
                     }
 
-
-
-
                     if (i  == Area.AREA_SIZE - 1 && j > 0 && j < Area.AREA_SIZE - 1) {
                         area.setCell(i - 1, j - 1, Area.CellsType.MISS);
                         area.setCell(i - 1, j - 1, Area.CellsType.MISS);

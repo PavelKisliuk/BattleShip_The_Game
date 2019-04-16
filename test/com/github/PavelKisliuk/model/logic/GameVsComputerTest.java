@@ -21,20 +21,6 @@ public class GameVsComputerTest {
     void testOpponentGo() {
         Area area = creator.createArea();
         int counterGoes = 1;
-//        Ship[] ships = new Ship[]{
-//                new Ship(1, new int[]{0}, new int[]{0}),
-//                new Ship(1, new int[]{2}, new int[]{0}),
-//                new Ship(1, new int[]{4}, new int[]{0}),
-//                new Ship(1, new int[]{6}, new int[]{0}),
-//                new Ship(2, new int[]{9, 8}, new int[]{9, 9}),
-//                new Ship(2, new int[]{0, 1}, new int[]{9, 9}),
-//                new Ship(2, new int[]{3, 4}, new int[]{9, 9}),
-//                new Ship(3, new int[]{0, 1, 2}, new int[]{5, 5, 5}),
-//                new Ship(3, new int[]{4, 5, 6}, new int[]{5, 5, 5}),
-//                new Ship(4, new int[]{0, 1, 2, 3}, new int[]{3, 3, 3, 3}),
-//        };
-//        arranger.arrangeFewShips(area, ships);
-//        arranger.changeCelltype(area, NEIGHBOR, EMPTY);
 
         randomAreaArranger.arrangeRandomArea(area);
 
@@ -45,5 +31,17 @@ public class GameVsComputerTest {
         }
         System.out.println(counterGoes);
 
+    }
+
+    @Test
+    void testSaveAndLoad() {
+        Area area = creator.createArea();
+        Area area1 = creator.createArea();
+        randomAreaArranger.arrangeRandomArea(area);
+        System.out.println(area);
+        gameVsComputer.saveGame("/Users/dzmitryplatonov/Documents/GitHub/BattleShip_The_Game/savegame", area, area1);
+
+        gameVsComputer.loadGame("/Users/dzmitryplatonov/Documents/GitHub/BattleShip_The_Game/savegame", area, area1);
+        System.out.println(area);
     }
 }

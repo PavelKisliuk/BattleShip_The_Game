@@ -23,6 +23,8 @@ public class GameSaver {
 
 
     public void saveGame(String path, Area playerArea, Area opponentArea) {
+
+
         try {
             Files.write(Paths.get(path), playerArea.toString().getBytes());
             Files.write(Paths.get(path), Arrays.toString(playerArea.getShips()).getBytes(), StandardOpenOption.APPEND);
