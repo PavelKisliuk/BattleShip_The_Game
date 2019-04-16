@@ -27,6 +27,11 @@ public class Main extends Application {
 		primaryStage.setTitle(title);
 		primaryStage.centerOnScreen();
 		primaryStage.setOnShown(windowEvent -> choiceGame(primaryStage));
+		primaryStage.setOnCloseRequest(windowEvent -> {
+			if(!mainController.savedStopGame()) {
+				windowEvent.consume();
+			}
+		});
 
 		//FXML adjustment
 		//-----------------------------------------------
@@ -86,7 +91,6 @@ public class Main extends Application {
 			Platform.exit();
 		} else if (CGWController.getPvPGame()) {
 			this.mainController.setGame(null);
-
 		} else {
 			this.mainController.setGame(new GameVsComputer());
 		}

@@ -48,10 +48,12 @@ public class MainController {
 	//---------------------------------------------------------------
 	private AddShipsWindowController ASWController;
 	private LoadWindowController LWController;
+	private QuestionWindowController QWController;
 
 	private AbstractGame game;
 	private Area playerArea;
 	private Area opponentArea;
+	private boolean isGameGo;
 
 	@FXML
 	private MenuItem loadMenuItem;
@@ -120,6 +122,8 @@ public class MainController {
 				goesInfoLabel.setText("You won!!!");
 				gameInfoLabel.setText("Click New game.");
 				opponentGridPane.setDisable(true);
+				saveMenuItem.setDisable(true);
+				isGameGo = false;
 			}
 		}
 	}
@@ -140,6 +144,7 @@ public class MainController {
 
 	@FXML
 	void initialize() {
+		isGameGo = false;
 		playerArea = new Area();
 		opponentArea = new Area();
 		startButton.setOnAction(actionEvent -> startButtonOnAction());
@@ -172,6 +177,9 @@ public class MainController {
 				case "Load":
 					LWController = fxmlLoader.getController();
 					break;
+				default:
+					QWController = fxmlLoader.getController();
+					QWController.setQuestionLabel(title);
 			}
 
 			//modality adjustment
@@ -190,6 +198,7 @@ public class MainController {
 			e.printStackTrace();
 		}
 	}
+
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
 	private void loadMenuItemOnAction() {
@@ -198,7 +207,7 @@ public class MainController {
 		openWindow(path, title);
 
 		if (LWController.getPath() != null) {
-			((GameVsComputer)game).loadGame(LWController.getPath(), playerArea, opponentArea);
+			((GameVsComputer) game).loadGame(LWController.getPath(), playerArea, opponentArea);
 			setDefaultArea(opponentGridPane);
 			setWindowElementsOnStartButton();
 			coverOpponentArea();
@@ -208,15 +217,16 @@ public class MainController {
 			redisplay(opponentGridPane, opponentArea);
 			goesInfoLabel.setText("Game load. You go.");
 			gameInfoLabel.setText("Game start.");
+			isGameGo = true;
 		}
 	}
 
 	private void saveMenuItemOnAction() {
 		String path = ("save/");
-		if(!(Files.exists(Path.of(path)))){
+		if (!(Files.exists(Path.of(path)))) {
 			try {
 				Files.createDirectory(Path.of(path));
-			}catch (IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -224,7 +234,7 @@ public class MainController {
 		time = time.substring(0, 19);
 		time = time.replaceAll(":", "-");
 		path = String.format("%s%19s%s", path, time, ".dat");
-		((GameVsComputer)game).saveGame(path, playerArea, opponentArea);
+		((GameVsComputer) game).saveGame(path, playerArea, opponentArea);
 		saveImageView.setVisible(true);
 		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
 				timelineEvent -> saveImageView.setVisible(false)));
@@ -242,6 +252,7 @@ public class MainController {
 			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
 			opponentArea = game.getOpponentArea();
 			goesInfoLabel.setText("You go.");
+			isGameGo = true;
 			if (!(goFirstCheckBox.isSelected()) && !(game.playerGoFirst())) {
 				goesInfoLabel.setText("Computer go.");
 				new Thread(this::opponentGoConfigure).start();
@@ -306,11 +317,11 @@ public class MainController {
 		exitMenuItem.setDisable(true);
 		anotherGameTypeMenuItem.setDisable(true);
 		aboutMenuItem.setDisable(true);
-		if((int)gameSpeedSlider.getValue() == gameSpeedSlider.getMax()) {
+		if ((int) gameSpeedSlider.getValue() == gameSpeedSlider.getMax()) {
 			timeoutProgressBar.setVisible(true);
 		}
 		try {
-			Thread.sleep((int)gameSpeedSlider.getValue());
+			Thread.sleep((int) gameSpeedSlider.getValue());
 			timeoutProgressBar.setVisible(false);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -327,6 +338,7 @@ public class MainController {
 					exitMenuItem.setDisable(false);
 					anotherGameTypeMenuItem.setDisable(false);
 					aboutMenuItem.setDisable(false);
+					isGameGo = false;
 				});
 			} else {
 				Platform.runLater(() -> redisplay(playerGridPane, playerArea));
@@ -400,12 +412,15 @@ public class MainController {
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
 	private void newGameOnAction() {
-		setDefaultArea(opponentGridPane);
-		setDefaultArea(playerGridPane);
+		if (savedStopGame()) {
+			setDefaultArea(opponentGridPane);
+			setDefaultArea(playerGridPane);
 
-		setOpponentAlive();
+			setOpponentAlive();
 
-		setWindowElementsOnNewGameButton();
+			setWindowElementsOnNewGameButton();
+			isGameGo = false;
+		}
 	}
 
 	private void setDefaultArea(GridPane gridPane) {
@@ -492,10 +507,30 @@ public class MainController {
 
 	public void setGame(AbstractGame game) {
 		this.game = game;
-		if(this.game instanceof GameVsComputer) {
+		if (this.game instanceof GameVsComputer) {
 			loadMenuItem.setDisable(false);
 			saveMenuItem.setDisable(true);
 			goFirstCheckBox.setSelected(false);
 		}
+	}
+
+	public boolean savedStopGame() {
+		if(isGameGo) {
+			String path = "/com/github/PavelKisliuk/view/QuestionWindow.fxml";
+			String title;
+			if (game instanceof GameVsComputer) {
+				title = "Save game?";
+				openWindow(path, title);
+				if (QWController.isNo() == null) {
+					return false;
+				} else if (!QWController.isNo()) {
+					saveMenuItemOnAction();
+					return true;
+				}
+			}
+
+			return QWController.isNo() != null;
+		}
+		else return true;
 	}
 }

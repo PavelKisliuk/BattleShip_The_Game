@@ -7,31 +7,32 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class QuestionWindowController {
-	private boolean isCancel = true;
+	private Boolean isNo;
 
 	@FXML
 	private Label questionLabel;
 
 	@FXML
-	void okButtonOnAction(ActionEvent event) {
-		isCancel = false;
+	void yesButtonOnAction(ActionEvent event) {
+		isNo = false;
 		Node b = (Node)event.getTarget();
 		Stage stage = (Stage)b.getScene().getWindow();
 		stage.close();
 	}
 
 	@FXML
-	void cancelButtonOnAction(ActionEvent event) {
+	void noButtonOnAction(ActionEvent event) {
+		isNo = true;
 		Node b = (Node)event.getTarget();
 		Stage stage = (Stage)b.getScene().getWindow();
 		stage.close();
 	}
 
-	public void setQuestionLabel(String questionLabel) {
-		this.questionLabel.setText(questionLabel);
+	void setQuestionLabel(String questionLabel) {
+		this.questionLabel.setText("Do you want to " + questionLabel.toLowerCase());
 	}
 
-	public boolean isCancel() {
-		return isCancel;
+	Boolean isNo() {
+		return isNo;
 	}
 }
