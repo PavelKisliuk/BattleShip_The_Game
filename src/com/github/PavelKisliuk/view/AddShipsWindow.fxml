@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.PavelKisliuk.controller.AddShipsWindowController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.PavelKisliuk.controller.AddShipsWindowController">
       <Button fx:id="automaticArrangementButton" mnemonicParsing="false" text="Automatic arrangement">
          <font>
             <Font size="14.0" />
@@ -126,10 +126,10 @@
                   </HBox>
                </top>
                <left>
-                  <VBox spacing="7.4" BorderPane.alignment="CENTER">
+                  <VBox spacing="7.0" BorderPane.alignment="CENTER">
                         <Label text="0">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -137,7 +137,7 @@
                         </Label>
                         <Label text="1">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -145,7 +145,7 @@
                         </Label>
                         <Label text="2">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -153,7 +153,7 @@
                         </Label>
                         <Label text="3">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -161,7 +161,7 @@
                         </Label>
                         <Label text="4">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -169,7 +169,7 @@
                         </Label>
                         <Label text="5">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -177,7 +177,7 @@
                         </Label>
                         <Label text="6">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -185,7 +185,7 @@
                         </Label>
                         <Label text="7">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -193,7 +193,7 @@
                         </Label>
                         <Label text="8">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
@@ -201,14 +201,14 @@
                         </Label>
                         <Label text="9">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Times New Roman" size="15.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                         </Label>
                      <BorderPane.margin>
-                        <Insets right="5.0" />
+                        <Insets right="5.0" top="3.0" />
                      </BorderPane.margin>
                   </VBox>
                </left>
