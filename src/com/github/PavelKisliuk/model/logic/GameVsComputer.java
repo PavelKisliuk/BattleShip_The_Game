@@ -152,22 +152,20 @@ public class GameVsComputer extends AbstractGame implements SaveAndLoad {
     }
 
     @Override
-    public boolean loadGame(String path, Area playerArea, Area opponentArea) {
+    public void loadGame(String path, Area playerArea, Area opponentArea) {
 
         playerArea.copy(gameLoader.loadPlayerArea(path));
         opponentArea.copy(gameLoader.loadOpponentArea(path));
-        return true;
     }
 
     @Override
-    public boolean saveGame(String path, Area playerArea, Area opponentArea) {
+    public void saveGame(String path, Area playerArea, Area opponentArea) {
         gameSaver.saveGame(path, playerArea, opponentArea);
-        return true;
     }
 }
 
 interface SaveAndLoad {
-    boolean loadGame(String path, Area playerArea, Area opponentArea);
-    boolean saveGame(final String path, Area playerArea, Area opponentArea);
+    void loadGame(String path, Area playerArea, Area opponentArea);
+    void saveGame(final String path, Area playerArea, Area opponentArea);
 }
 
