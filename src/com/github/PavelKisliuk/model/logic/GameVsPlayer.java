@@ -12,7 +12,7 @@ public class GameVsPlayer extends AbstractGame {
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
 
-	public void connect(Area area) {
+	public boolean connect() {
 		String hostName = "127.0.0.1";
 		int port = 2101;
 
@@ -21,6 +21,14 @@ public class GameVsPlayer extends AbstractGame {
 			output = new ObjectOutputStream(client.getOutputStream());
 			output.flush();
 			input = new ObjectInputStream(client.getInputStream());
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+
+	public void sendArea(Area area) {
+		try {
 			output.writeObject(area);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.PavelKisliuk.controller.MainController">
+<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.PavelKisliuk.controller.MainController">
    <center>
       <HBox spacing="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -668,7 +668,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem fx:id="anotherGameTypeMenuItem" mnemonicParsing="false" text="Delete" />
+              <MenuItem fx:id="anotherGameTypeMenuItem" mnemonicParsing="false" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -706,7 +706,7 @@
                   <Font name="Times New Roman" size="15.0" />
                </font>
             </Button>
-            <Label text="Game speed:">
+            <Label fx:id="gameSpeedLabel" text="Game speed:">
                <font>
                   <Font name="Times New Roman" size="14.0" />
                </font>
