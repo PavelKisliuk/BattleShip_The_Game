@@ -3,10 +3,11 @@ package com.github.PavelKisliuk.model.data;
 import com.github.PavelKisliuk.util.exception.ShipInitializationException;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Ship {
+public class Ship implements Serializable {
 
 	private static final Logger logger;
 

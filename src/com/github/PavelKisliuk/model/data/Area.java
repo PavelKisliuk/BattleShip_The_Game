@@ -2,10 +2,11 @@ package com.github.PavelKisliuk.model.data;
 
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 
-public class Area{
+public class Area implements Serializable {
 
     private static final Logger logger;
 

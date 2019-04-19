@@ -12,15 +12,16 @@ public class GameVsPlayer extends AbstractGame {
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
 
-	public void connect(){
+	public void connect(Area area) {
 		String hostName = "127.0.0.1";
 		int port = 2101;
 
 		try {
-			this.client = new Socket(hostName, port);
-			this.output = new ObjectOutputStream(this.client.getOutputStream());
-			this.output.flush();
-			this.input = new ObjectInputStream(this.client.getInputStream());
+			client = new Socket(hostName, port);
+			output = new ObjectOutputStream(client.getOutputStream());
+			output.flush();
+			input = new ObjectInputStream(client.getInputStream());
+			output.writeObject(area);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -30,7 +31,7 @@ public class GameVsPlayer extends AbstractGame {
 	public Area getOpponentArea() {
 		Area area = new Area();
 		try {
-			area = (Area)input.readObject();
+			area = (Area) input.readObject();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -39,23 +40,30 @@ public class GameVsPlayer extends AbstractGame {
 
 	@Override
 	public boolean playerGoFirst() {
+		boolean b = false;
 		try {
-			return input.readBoolean();
-		} catch (IOException e) {
+			b = (Boolean) input.readObject();
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return b;
 	}
 
 	@Override
 	public boolean playerGo(Area area, int row, int column) {
 		try {
-			output.write(row);
-			output.write(column);
+			output.writeObject(row);
+			output.writeObject(column);
+			if(super.playerGo(area, row, column)) {
+				output.writeObject(Boolean.TRUE);
+				return true;
+			} else {
+				output.writeObject(Boolean.FALSE);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return super.playerGo(area, row, column);
+		return false;
 	}
 
 	@Override
@@ -63,11 +71,17 @@ public class GameVsPlayer extends AbstractGame {
 		int row = 0;
 		int column = 0;
 		try {
-			row = input.readInt();
-			column = input.readInt();
-		} catch (IOException e) {
+			row = (Integer) input.readObject();
+			column = (Integer) input.readObject();
+			if(super.playerGo(area, row, column)) {
+				output.writeObject(Boolean.TRUE);
+				return true;
+			} else {
+				output.writeObject(Boolean.FALSE);
+			}
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return super.playerGo(area, row, column);
+		return false;
 	}
 }

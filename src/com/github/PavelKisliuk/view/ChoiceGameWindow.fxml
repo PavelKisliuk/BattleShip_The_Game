@@ -7,7 +7,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.PavelKisliuk.controller.ChoiceGameWindowController">
    <children>
-      <Button disable="true" focusTraversable="false" mnemonicParsing="false" onAction="#PvPOnAction" prefHeight="45.0" prefWidth="230.0" text="Person vs Person">
+      <Button focusTraversable="false" mnemonicParsing="false" onAction="#PvPOnAction" prefHeight="45.0" prefWidth="230.0" text="Person vs Person">
          <font>
             <Font name="Times New Roman" size="24.0" />
          </font>

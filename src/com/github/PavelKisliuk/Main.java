@@ -3,6 +3,7 @@ package com.github.PavelKisliuk;
 import com.github.PavelKisliuk.controller.ChoiceGameWindowController;
 import com.github.PavelKisliuk.controller.MainController;
 import com.github.PavelKisliuk.model.logic.GameVsComputer;
+import com.github.PavelKisliuk.model.logic.GameVsPlayer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -90,7 +91,7 @@ public class Main extends Application {
 		if (CGWController.getPvPGame() == null) {
 			Platform.exit();
 		} else if (CGWController.getPvPGame()) {
-			this.mainController.setGame(null);
+			this.mainController.setGame(new GameVsPlayer());
 		} else {
 			this.mainController.setGame(new GameVsComputer());
 		}

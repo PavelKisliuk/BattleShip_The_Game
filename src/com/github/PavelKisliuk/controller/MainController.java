@@ -3,6 +3,7 @@ package com.github.PavelKisliuk.controller;
 import com.github.PavelKisliuk.model.data.Area;
 import com.github.PavelKisliuk.model.logic.AbstractGame;
 import com.github.PavelKisliuk.model.logic.GameVsComputer;
+import com.github.PavelKisliuk.model.logic.GameVsPlayer;
 import com.github.PavelKisliuk.util.Checker;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -253,7 +254,8 @@ public class MainController {
 			opponentArea = game.getOpponentArea();
 			goesInfoLabel.setText("You go.");
 			isGameGo = true;
-			if (!(goFirstCheckBox.isSelected()) && !(game.playerGoFirst())) {
+			if (!(goFirstCheckBox.isSelected()) &&
+					!(game.playerGoFirst())) {
 				goesInfoLabel.setText("Computer go.");
 				new Thread(this::opponentGoConfigure).start();
 			}
@@ -268,6 +270,10 @@ public class MainController {
 		if (!(ASWController.isCancel())) {
 			playerArea = ASWController.getArea();
 			setShipsOnPlayerArea();
+			//--------------------------------------------
+			if(game instanceof GameVsPlayer) {
+				((GameVsPlayer) game).connect(playerArea);
+			}
 		} else {
 			gameInfoLabel.setText("Ships not arrange! Try again.");
 		}
