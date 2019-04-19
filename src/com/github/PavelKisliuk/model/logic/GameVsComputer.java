@@ -7,6 +7,7 @@ import com.github.PavelKisliuk.util.saveload.GameLoader;
 import com.github.PavelKisliuk.util.saveload.GameSaver;
 import org.apache.log4j.Logger;
 
+import java.io.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -152,20 +153,62 @@ public class GameVsComputer extends AbstractGame implements SaveAndLoad {
     }
 
     @Override
-    public void loadGame(String path, Area playerArea, Area opponentArea) {
+    public boolean loadGame(String path, Area playerArea, Area opponentArea) {
 
-        playerArea.copy(gameLoader.loadPlayerArea(path));
-        opponentArea.copy(gameLoader.loadOpponentArea(path));
+        try {
+            FileInputStream fis = new FileInputStream(path);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+
+            playerArea.copy((Area) ois.readObject());
+            logger.debug("Player area \n" + playerArea + " loaded");
+            opponentArea.copy((Area) ois.readObject());
+            logger.debug("Opponent area \n" + opponentArea + " loaded");
+
+            ois.close();
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+//        playerArea.copy(gameLoader.loadPlayerArea(path));
+//        opponentArea.copy(gameLoader.loadOpponentArea(path));
+        return true;
     }
 
     @Override
-    public void saveGame(String path, Area playerArea, Area opponentArea) {
-        gameSaver.saveGame(path, playerArea, opponentArea);
+    public boolean saveGame(String path, Area playerArea, Area opponentArea) {
+
+        try {
+            FileOutputStream fos = new FileOutputStream(path);
+            ObjectOutputStream ois = new ObjectOutputStream(fos);
+
+            ois.writeObject(playerArea);
+            logger.debug("Player area \n" + playerArea + " saved");
+            ois.writeObject(opponentArea);
+            logger.debug("Opponent area \n" + opponentArea + " saved");
+
+
+            ois.close();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        gameSaver.saveGame(path, playerArea, opponentArea);
+        return true;
     }
 }
 
 interface SaveAndLoad {
-    void loadGame(String path, Area playerArea, Area opponentArea);
-    void saveGame(final String path, Area playerArea, Area opponentArea);
+    boolean loadGame(String path, Area playerArea, Area opponentArea);
+
+    boolean saveGame(final String path, Area playerArea, Area opponentArea);
 }
 
