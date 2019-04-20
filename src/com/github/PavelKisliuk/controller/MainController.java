@@ -5,6 +5,7 @@ import com.github.PavelKisliuk.model.logic.AbstractGame;
 import com.github.PavelKisliuk.model.logic.GameVsComputer;
 import com.github.PavelKisliuk.model.logic.GameVsPlayer;
 import com.github.PavelKisliuk.util.Checker;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -57,7 +58,7 @@ public class MainController {
 	private Area playerArea;
 	private Area opponentArea;
 	private boolean isGameGo;
-	Timeline progressTimeline;
+	private Timeline progressTimeline;
 
 	@FXML
 	private BorderPane mainBorderPane;
@@ -129,11 +130,19 @@ public class MainController {
 			setOpponentKilled();
 			redisplay(opponentGridPane, opponentArea);
 			if (game.isWin(opponentArea)) {
+				//---------------------------------------------------------------
+				if(game instanceof GameVsPlayer) {
+					progressTimeline.stop();
+					timeoutProgressBar.setVisible(false);
+				}
+				//---------------------------------------------------------------
 				goesInfoLabel.setText("You won!!!");
 				gameInfoLabel.setText("Click New game.");
 				opponentGridPane.setDisable(true);
 				saveMenuItem.setDisable(true);
 				isGameGo = false;
+			} else {
+				setProgressBar(Color.BLUE);
 			}
 		}
 	}
@@ -256,12 +265,29 @@ public class MainController {
 	//---------------------------------------------------------------
 	private void startButtonOnAction() {
 		setPlayerArea();
+		startButton.setDisable(true);
 		if (!(ASWController.isCancel())) {
 			coverOpponentArea();
-			setWindowElementsOnStartButton();
-			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
+			Timeline timeline = new Timeline();
+			Timeline finalTimeline = timeline;
+			timeline = new Timeline(new KeyFrame(Duration.millis(500),
+					timelineEvent -> this.setTextOnConnecting(finalTimeline)));
+			timeline.setCycleCount(Animation.INDEFINITE);
+			timeline.play();
+			saveImageView.setVisible(true);
+
+			new Thread(this::waitArea).start();
+		}
+	}
+
+	private void waitArea() {
 			opponentArea = game.getOpponentArea();
+
+		Platform.runLater(() -> {
+			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
 			goesInfoLabel.setText("You go.");
+
+			setWindowElementsOnStartButton();
 			isGameGo = true;
 			setProgressBar(Color.BLUE);
 			if (!(goFirstCheckBox.isSelected()) &&
@@ -269,7 +295,8 @@ public class MainController {
 				goesInfoLabel.setText("Computer go.");
 				new Thread(this::opponentGoConfigure).start();
 			}
-		}
+		});
+
 	}
 
 	private void setPlayerArea() {
@@ -282,6 +309,8 @@ public class MainController {
 			//------------------------------------------------------------------1
 			if (game instanceof GameVsPlayer) {
 				((GameVsPlayer) game).sendArea(playerArea);
+
+				gameInfoLabel.setText("Wait opponent.  ");
 			}
 			//------------------------------------------------------------------
 			setShipsOnPlayerArea();
@@ -328,21 +357,23 @@ public class MainController {
 	}
 
 	private void opponentGoConfigure() {
-		opponentGridPane.setDisable(true);
-		loadMenuItem.setDisable(true);
-		saveMenuItem.setDisable(true);
-		exitMenuItem.setDisable(true);
-		anotherGameTypeMenuItem.setDisable(true);
-		aboutMenuItem.setDisable(true);
+		setElementsForOpponentGor(true);
 
 		setProgressBar(Color.RED);
 
 		if (game.opponentGo(playerArea)) {
 			if (game.isWin(playerArea)) {
 				Platform.runLater(() -> {
+					//---------------------------------------------------------------
+					if(game instanceof GameVsPlayer) {
+						progressTimeline.stop();
+						timeoutProgressBar.setVisible(false);
+					}
+					//---------------------------------------------------------------
 					redisplay(playerGridPane, playerArea);
 					goesInfoLabel.setText("Computer won!!!");
 					gameInfoLabel.setText("Click New game.");
+					newGameButton.setDisable(false);
 					showOpponentShips();
 					loadMenuItem.setDisable(false);
 					exitMenuItem.setDisable(false);
@@ -359,14 +390,23 @@ public class MainController {
 				redisplay(playerGridPane, playerArea);
 				goesInfoLabel.setText("You go.");
 			});
-			opponentGridPane.setDisable(false);
-			loadMenuItem.setDisable(false);
-			saveMenuItem.setDisable(false);
-			exitMenuItem.setDisable(false);
-			anotherGameTypeMenuItem.setDisable(false);
-			aboutMenuItem.setDisable(false);
+			setElementsForOpponentGor(false);
 			setProgressBar(Color.BLUE);
 		}
+	}
+
+	private void setElementsForOpponentGor(boolean condition) {
+		if(game instanceof GameVsComputer) {
+			opponentGridPane.setDisable(condition);
+			loadMenuItem.setDisable(condition);
+			saveMenuItem.setDisable(condition);
+			exitMenuItem.setDisable(condition);
+			anotherGameTypeMenuItem.setDisable(condition);
+			newGameButton.setDisable(condition);
+		} else {
+			opponentGridPane.setDisable(condition);
+		}
+
 	}
 
 	private void setProgressBar(Color color) {
@@ -495,6 +535,7 @@ public class MainController {
 		playerGridPane.setGridLinesVisible(false);
 		opponentGridPane.setDisable(true);
 		startButton.setVisible(true);
+		startButton.setDisable(false);
 		goFirstCheckBox.setVisible(true);
 		newGameButton.setVisible(false);
 		rightVBox.setVisible(false);
@@ -576,8 +617,8 @@ public class MainController {
 			timeoutProgressBar.lookup(".bar").setStyle("-fx-accent: #1085BF;");
 		} else {
 			startButton.setDisable(false);
-			loadMenuItem.setDisable(false);
-			saveMenuItem.setDisable(false);
+			loadMenuItem.setDisable(true);
+			saveMenuItem.setDisable(true);
 			goFirstCheckBox.setSelected(false);
 			goFirstCheckBox.setVisible(false);
 			gameSpeedLabel.setVisible(false);
@@ -595,16 +636,20 @@ public class MainController {
 		}
 	}
 
-	private void setTextOnConnecting() {
+	private void setTextOnConnecting(Timeline timeline) {
 		switch (gameInfoLabel.getText()) {
-			case "Connecting with server.  ":
-				gameInfoLabel.setText("Connecting with server.. ");
+			case "Wait opponent.  ":
+				gameInfoLabel.setText("Wait opponent.. ");
 				break;
-			case "Connecting with server.. ":
-				gameInfoLabel.setText("Connecting with server...");
+			case "Wait opponent.. ":
+				gameInfoLabel.setText("Wait opponent...");
 				break;
-			case "Connecting with server...":
-				gameInfoLabel.setText("Connecting with server.  ");
+			case "Wait opponent...":
+				gameInfoLabel.setText("Wait opponent.  ");
+				break;
+			default:
+				timeline.stop();
+				saveImageView.setVisible(false);
 				break;
 		}
 	}
