@@ -5,6 +5,7 @@ import com.github.PavelKisliuk.model.logic.AbstractGame;
 import com.github.PavelKisliuk.model.logic.GameVsComputer;
 import com.github.PavelKisliuk.model.logic.GameVsPlayer;
 import com.github.PavelKisliuk.util.Checker;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -17,8 +18,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -55,6 +58,10 @@ public class MainController {
 	private Area playerArea;
 	private Area opponentArea;
 	private boolean isGameGo;
+	private Timeline progressTimeline;
+
+	@FXML
+	private BorderPane mainBorderPane;
 
 	@FXML
 	private MenuItem loadMenuItem;
@@ -85,6 +92,9 @@ public class MainController {
 
 	@FXML
 	private Button newGameButton;
+
+	@FXML
+	private Label gameSpeedLabel;
 
 	@FXML
 	private Slider gameSpeedSlider;
@@ -120,11 +130,19 @@ public class MainController {
 			setOpponentKilled();
 			redisplay(opponentGridPane, opponentArea);
 			if (game.isWin(opponentArea)) {
+				//---------------------------------------------------------------
+				if(game instanceof GameVsPlayer) {
+					progressTimeline.stop();
+					timeoutProgressBar.setVisible(false);
+				}
+				//---------------------------------------------------------------
 				goesInfoLabel.setText("You won!!!");
 				gameInfoLabel.setText("Click New game.");
 				opponentGridPane.setDisable(true);
 				saveMenuItem.setDisable(true);
 				isGameGo = false;
+			} else {
+				setProgressBar(Color.BLUE);
 			}
 		}
 	}
@@ -247,19 +265,38 @@ public class MainController {
 	//---------------------------------------------------------------
 	private void startButtonOnAction() {
 		setPlayerArea();
+		startButton.setDisable(true);
 		if (!(ASWController.isCancel())) {
 			coverOpponentArea();
-			setWindowElementsOnStartButton();
-			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
+			Timeline timeline = new Timeline();
+			Timeline finalTimeline = timeline;
+			timeline = new Timeline(new KeyFrame(Duration.millis(500),
+					timelineEvent -> this.setTextOnConnecting(finalTimeline)));
+			timeline.setCycleCount(Animation.INDEFINITE);
+			timeline.play();
+			saveImageView.setVisible(true);
+
+			new Thread(this::waitArea).start();
+		}
+	}
+
+	private void waitArea() {
 			opponentArea = game.getOpponentArea();
+
+		Platform.runLater(() -> {
+			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
 			goesInfoLabel.setText("You go.");
+
+			setWindowElementsOnStartButton();
 			isGameGo = true;
+			setProgressBar(Color.BLUE);
 			if (!(goFirstCheckBox.isSelected()) &&
 					!(game.playerGoFirst())) {
 				goesInfoLabel.setText("Computer go.");
 				new Thread(this::opponentGoConfigure).start();
 			}
-		}
+		});
+
 	}
 
 	private void setPlayerArea() {
@@ -269,11 +306,14 @@ public class MainController {
 
 		if (!(ASWController.isCancel())) {
 			playerArea = ASWController.getArea();
-			setShipsOnPlayerArea();
-			//--------------------------------------------
-			if(game instanceof GameVsPlayer) {
-				((GameVsPlayer) game).connect(playerArea);
+			//------------------------------------------------------------------1
+			if (game instanceof GameVsPlayer) {
+				((GameVsPlayer) game).sendArea(playerArea);
+
+				gameInfoLabel.setText("Wait opponent.  ");
 			}
+			//------------------------------------------------------------------
+			setShipsOnPlayerArea();
 		} else {
 			gameInfoLabel.setText("Ships not arrange! Try again.");
 		}
@@ -317,28 +357,23 @@ public class MainController {
 	}
 
 	private void opponentGoConfigure() {
-		opponentGridPane.setDisable(true);
-		loadMenuItem.setDisable(true);
-		saveMenuItem.setDisable(true);
-		exitMenuItem.setDisable(true);
-		anotherGameTypeMenuItem.setDisable(true);
-		aboutMenuItem.setDisable(true);
-		if ((int) gameSpeedSlider.getValue() == gameSpeedSlider.getMax()) {
-			timeoutProgressBar.setVisible(true);
-		}
-		try {
-			Thread.sleep((int) gameSpeedSlider.getValue());
-			timeoutProgressBar.setVisible(false);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		setElementsForOpponentGor(true);
+
+		setProgressBar(Color.RED);
 
 		if (game.opponentGo(playerArea)) {
 			if (game.isWin(playerArea)) {
 				Platform.runLater(() -> {
+					//---------------------------------------------------------------
+					if(game instanceof GameVsPlayer) {
+						progressTimeline.stop();
+						timeoutProgressBar.setVisible(false);
+					}
+					//---------------------------------------------------------------
 					redisplay(playerGridPane, playerArea);
 					goesInfoLabel.setText("Computer won!!!");
 					gameInfoLabel.setText("Click New game.");
+					newGameButton.setDisable(false);
 					showOpponentShips();
 					loadMenuItem.setDisable(false);
 					exitMenuItem.setDisable(false);
@@ -355,12 +390,68 @@ public class MainController {
 				redisplay(playerGridPane, playerArea);
 				goesInfoLabel.setText("You go.");
 			});
-			opponentGridPane.setDisable(false);
-			loadMenuItem.setDisable(false);
-			saveMenuItem.setDisable(false);
-			exitMenuItem.setDisable(false);
-			anotherGameTypeMenuItem.setDisable(false);
-			aboutMenuItem.setDisable(false);
+			setElementsForOpponentGor(false);
+			setProgressBar(Color.BLUE);
+		}
+	}
+
+	private void setElementsForOpponentGor(boolean condition) {
+		if(game instanceof GameVsComputer) {
+			opponentGridPane.setDisable(condition);
+			loadMenuItem.setDisable(condition);
+			saveMenuItem.setDisable(condition);
+			exitMenuItem.setDisable(condition);
+			anotherGameTypeMenuItem.setDisable(condition);
+			newGameButton.setDisable(condition);
+		} else {
+			opponentGridPane.setDisable(condition);
+		}
+
+	}
+
+	private void setProgressBar(Color color) {
+		if (game instanceof GameVsComputer) {
+			if(color == Color.RED) {
+				if ((int) gameSpeedSlider.getValue() == gameSpeedSlider.getMax()) {
+					timeoutProgressBar.setVisible(true);
+				}
+				try {
+					Thread.sleep((int) gameSpeedSlider.getValue());
+					timeoutProgressBar.setVisible(false);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		} else {
+			timeoutProgressBar.setVisible(true);
+			timeoutProgressBar.setProgress(0);
+			if (Color.RED == color) {
+				timeoutProgressBar.lookup(".bar").setStyle("-fx-accent: #BF1515;");
+			} else {
+				timeoutProgressBar.lookup(".bar").setStyle("-fx-accent: #1085BF;");
+			}
+			if(progressTimeline != null) {
+				progressTimeline.stop();
+			}
+			progressTimeline = new Timeline(new KeyFrame(Duration.millis(30),
+					timelineEvent ->
+							timeoutProgressBar.setProgress(timeoutProgressBar.getProgress() + 0.001)));
+			progressTimeline.setCycleCount(1000);
+			progressTimeline.setOnFinished(evt -> Platform.runLater(() -> this.onTimeOut(color)));
+			progressTimeline.play();
+		}
+	}
+
+	private void onTimeOut(Color color)
+	{
+		timeoutProgressBar.setVisible(false);
+		timeoutProgressBar.setProgress(0);
+		opponentGridPane.setDisable(true);
+		if(Color.BLUE == color) {
+			gameInfoLabel.setText("Timeout! Opponent won!");
+		}
+		else {
+			gameInfoLabel.setText("Timeout! You won!");
 		}
 	}
 
@@ -444,6 +535,7 @@ public class MainController {
 		playerGridPane.setGridLinesVisible(false);
 		opponentGridPane.setDisable(true);
 		startButton.setVisible(true);
+		startButton.setDisable(false);
 		goFirstCheckBox.setVisible(true);
 		newGameButton.setVisible(false);
 		rightVBox.setVisible(false);
@@ -513,15 +605,57 @@ public class MainController {
 
 	public void setGame(AbstractGame game) {
 		this.game = game;
+		mainBorderPane.setVisible(true);
 		if (this.game instanceof GameVsComputer) {
 			loadMenuItem.setDisable(false);
 			saveMenuItem.setDisable(true);
 			goFirstCheckBox.setSelected(false);
+			goFirstCheckBox.setVisible(true);
+			gameSpeedLabel.setVisible(true);
+			gameSpeedSlider.setVisible(true);
+			timeoutProgressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+			timeoutProgressBar.lookup(".bar").setStyle("-fx-accent: #1085BF;");
+		} else {
+			startButton.setDisable(false);
+			loadMenuItem.setDisable(true);
+			saveMenuItem.setDisable(true);
+			goFirstCheckBox.setSelected(false);
+			goFirstCheckBox.setVisible(false);
+			gameSpeedLabel.setVisible(false);
+			gameSpeedSlider.setVisible(false);
+			timeoutProgressBar.setProgress(0);
+			gameSpeedSlider.setValue(gameSpeedSlider.getMax());
+
+			if (((GameVsPlayer) game).connect()) {
+				gameInfoLabel.setText("Connected. Click start to play.");
+				startButton.setDisable(false);
+			} else {
+				gameInfoLabel.setText("Server did not request. Click edit > change game");
+				startButton.setDisable(true);
+			}
+		}
+	}
+
+	private void setTextOnConnecting(Timeline timeline) {
+		switch (gameInfoLabel.getText()) {
+			case "Wait opponent.  ":
+				gameInfoLabel.setText("Wait opponent.. ");
+				break;
+			case "Wait opponent.. ":
+				gameInfoLabel.setText("Wait opponent...");
+				break;
+			case "Wait opponent...":
+				gameInfoLabel.setText("Wait opponent.  ");
+				break;
+			default:
+				timeline.stop();
+				saveImageView.setVisible(false);
+				break;
 		}
 	}
 
 	public boolean savedStopGame() {
-		if(isGameGo) {
+		if (isGameGo) {
 			String path = "/com/github/PavelKisliuk/view/QuestionWindow.fxml";
 			String title;
 			if (game instanceof GameVsComputer) {
@@ -536,7 +670,6 @@ public class MainController {
 			}
 
 			return QWController.isNo() != null;
-		}
-		else return true;
+		} else return true;
 	}
 }
