@@ -9,6 +9,8 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 /**
+ * this class initialize playing objects
+ * implements pattern singleton
  * @author dzmitryplatonov on 2019-04-06.
  * @version 0.0.1
  */
@@ -24,7 +26,18 @@ public enum Initializer {
 
     private static final int MAXIMUM_SHIP_HEALTH = 4;
 
-
+    /**
+     * this method initializing {@link Ship} with:
+     * @param ship objects that we need to initialize
+     * @param health int parameter to initialize ship's health
+     * @param row int[] parameter to initialize ship's coordinates, length of this array must be equal to health,
+     *            else @throws ShipInitializationException
+     * @param column int[] parameter to initialize ship's coordinates, length of this array must be equal to health,
+     *            else @throws ShipInitializationException
+     * @throws ShipInitializationException
+     * if ship is null
+     * if health is out of limit (1 - 4)
+     */
     public void init(Ship ship, int health, int[] row, int[] column) {
 
         if (ship == null) {
@@ -54,6 +67,17 @@ public enum Initializer {
 
     }
 
+    /**
+     * this method initializing {@link Ship}, ship health will be set as @param row length or column length,
+     * that must be equal, else @throws ShipInitializationException
+     * @param ship objects that we need to initialize
+     * @param row int[] parameter to initialize ship's coordinates, length of this array must be equal to column length,
+     *            else @throws ShipInitializationException
+     * @param column int[] parameter to initialize ship's coordinates, length of this array must be equal to row length,
+     *            else @throws ShipInitializationException
+     * @throws ShipInitializationException
+     * if ship is null
+     */
     public void init(Ship ship, int[] row, int[] column) {
 
         if (ship == null) {
@@ -82,7 +106,11 @@ public enum Initializer {
         }
     }
 
-
+    /**
+     * this method is initializing ship with random values inside playing field borders and game rules
+     * @param ship object to initialize
+     * @param health int parameter to initialize ship's health
+     */
     public void initRandom(Ship ship, int health) {
 
         Random random = new SecureRandom();

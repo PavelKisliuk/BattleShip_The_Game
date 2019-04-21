@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 
 
 /**
+ * class to arrange ships randomly on needed playing field according to game rules
+ * implements pattern singleton
  * @author dzmitryplatonov on 2019-04-06.
  * @version 0.0.1
  */
@@ -24,6 +26,11 @@ public enum  RandomAreaArranger {
     Initializer initializer = Initializer.INSTANCE;
     Checker checker = Checker.INSTANCE;
 
+    /**
+     * method to place ships on area randomly
+     * @param area on which random ships need to be placed
+     * @return true if ships arranged correctly according to game rules
+     */
     public boolean arrangeRandomArea(Area area) {
         Ship shipFourCell = creator.createShip();
         initializer.initRandom(shipFourCell, Ship.FOUR_CELL_SHIP_HEALTH);
@@ -102,6 +109,7 @@ public enum  RandomAreaArranger {
         logger.debug(area.getShips().length + " random ships was successfully arranged on \n" + area);
 
         arranger.changeCelltype(area, Area.CellsType.NEIGHBOR, Area.CellsType.EMPTY);
+        logger.debug(Area.CellsType.NEIGHBOR + "'s changed to " + Area.CellsType.EMPTY + "'s");
 
         return checker.isRightArrangement(area);
     }

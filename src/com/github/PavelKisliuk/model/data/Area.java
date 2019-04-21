@@ -1,19 +1,14 @@
 package com.github.PavelKisliuk.model.data;
 
-import org.apache.log4j.Logger;
-
 import java.io.Serializable;
 import java.util.Arrays;
 
+/**
+ * class of playing field containing certain types of cells and ships {@link Ship}
+ */
+
 
 public class Area implements Serializable {
-
-    private static final Logger logger;
-
-    static {
-        logger = Logger.getLogger(Area.class);
-    }
-
 
     public static final int SHIPS_AMOUNT = 10;
     public static final int AREA_SIZE = 10;
@@ -22,11 +17,16 @@ public class Area implements Serializable {
     private CellsType[][] cellsTypes;
     private Ship[] ships;
 
-
-    public enum CellsType implements Serializable{
+    /**
+     * enum of cell types
+     */
+    public enum CellsType {
         EMPTY, SHIP, NEIGHBOR, BEATEN, MISS, KILLED, LAST
     }
 
+    /**
+     * default constructor to create an Area with empty cells and without any ships
+     */
     public Area() {
         cellsTypes = new CellsType[AREA_SIZE][AREA_SIZE];
         for (int i = 0; i < cellsTypes.length; i++) {
@@ -89,11 +89,20 @@ public class Area implements Serializable {
         this.cellsTypes = cellsTypes;
     }
 
+    /**
+     * method to set up an area
+     * @param cellsTypesArea this is a two dim array with cells
+     * @param ships this is an array of ships
+     */
     public void setArea(CellsType[][] cellsTypesArea, Ship[] ships) {
         this.cellsTypes = cellsTypesArea;
         this.ships = ships;
     }
 
+    /**
+     * method to set up an area according to array with ships
+     * @param ships
+     */
     public void setArea(Ship[] ships) {
         for (Ship ship : ships) {
 
@@ -107,6 +116,10 @@ public class Area implements Serializable {
         return ships;
     }
 
+    /**
+     * method to set up ships from array on area field
+     * @param ships array of ships to set
+     */
     public void setShips(Ship[] ships) {
         this.ships = ships;
         for (Ship ship : ships) {
@@ -119,6 +132,10 @@ public class Area implements Serializable {
         }
     }
 
+    /**
+     * method to add one ship to playing field
+     * @param ship
+     */
     public void addShip(Ship ship) {
         for (int i = 0; i < ship.getHealth(); i++) {
             this.cellsTypes[ship.getRow()[i]][ship.getColumn()[i]] = CellsType.SHIP;

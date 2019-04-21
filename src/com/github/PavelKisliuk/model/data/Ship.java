@@ -1,26 +1,26 @@
 package com.github.PavelKisliuk.model.data;
 
 import com.github.PavelKisliuk.util.exception.ShipInitializationException;
-import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * This class implements the ship view for our game model
+ */
 public class Ship implements Serializable {
-
-	private static final Logger logger;
-
-	static {
-		logger = Logger.getLogger(Ship.class);
-	}
 
 	public static final int ONE_CELL_SHIP_HEALTH = 1;
 	public static final int TWO_CELL_SHIP_HEALTH = 2;
 	public static final int THREE_CELL_SHIP_HEALTH = 3;
 	public static final int FOUR_CELL_SHIP_HEALTH = 4;
 
-
+	/**
+	 * health is a ship's length
+	 * row is an array of "Y" coordinates of the ship
+	 * column is an array of "X" coordinates of the ship
+	 */
 	private int health;
 	private int[] row;
 	private int[] column;
@@ -43,6 +43,9 @@ public class Ship implements Serializable {
 		}
 	}
 
+	/**
+	 * constructor to create a default ship with health = 1
+	 */
 	public Ship() {
 		this.health = ONE_CELL_SHIP_HEALTH;
 		this.row = new int[health];
@@ -53,6 +56,11 @@ public class Ship implements Serializable {
 		return health;
 	}
 
+	/**
+	 * health setter
+	 * @param health set the length of the ship
+	 * @throws ShipInitializationException if health is out of playing field borders
+	 */
 	public void setHealth(int health) {
 		if (health <= 0 || health > Area.AREA_SIZE) {
 			throw new ShipInitializationException("Illegal health parameter");
@@ -64,6 +72,11 @@ public class Ship implements Serializable {
 		return row;
 	}
 
+	/**
+	 * row coordinates setter
+	 * @param row array of "Y" coordinates
+	 * @throws ShipInitializationException if row is null or out of playing field borders
+	 */
 	public void setRow(int[] row) {
 		if (row == null || row.length <= 0 || row.length > Area.AREA_SIZE) {
 			throw new ShipInitializationException("Illegal row parameter");
@@ -76,6 +89,11 @@ public class Ship implements Serializable {
 		return column;
 	}
 
+	/**
+	 * column coordinates setter
+	 * @param column array of "X" coordinates
+	 * @throws ShipInitializationException if column is null or out of playing field borders
+	 */
 	public void setColumn(int[] column) {
 		if (column == null || column.length <= 0 || column.length > Area.AREA_SIZE) {
 			throw new ShipInitializationException("Illegal column parameter");

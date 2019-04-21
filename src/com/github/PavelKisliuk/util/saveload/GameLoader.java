@@ -37,9 +37,6 @@ public class GameLoader {
     Initializer initializer = Initializer.INSTANCE;
 
 
-    public void loadGame(String path) {
-
-    }
 
     public Area loadPlayerArea(String path) {
         List<String> stringsFromFile = readLines(path);
@@ -48,6 +45,7 @@ public class GameLoader {
         area.setShips(serializeShips(stringsFromFile.get(PLAYER_AREA_SHIPS_ROW_INDEX)));
         return area;
     }
+
 
     public Area loadOpponentArea(String path) {
         List<String> stringsFromFile = readLines(path);

@@ -5,6 +5,12 @@ import com.github.PavelKisliuk.model.data.Ship;
 import com.github.PavelKisliuk.util.exception.ShipHealthException;
 import org.apache.log4j.Logger;
 
+/**
+ * Game rules checker class
+ * implements pattern singleton
+ * @author dzmitryplatonov
+ * @version 0.0.1
+ */
 public enum  Checker {
 
     INSTANCE;
@@ -21,7 +27,11 @@ public enum  Checker {
     private static final int TWO_CELLS_SHIPS_AMOUNT = 3;
     private static final int ONE_CELLS_SHIPS_AMOUNT = 4;
 
-
+    /**
+     * method to check if the ships and cells placed correctly according to game rules
+     * @param area on which we need to make a check
+     * @return boolean value of checking
+     */
     public boolean isRightArrangement(Area area) {
         boolean result = true;
         if (area == null || area.length() != Area.AREA_SIZE || area.width() != Area.AREA_SIZE || area.getShips() == null) {
@@ -55,13 +65,16 @@ public enum  Checker {
                     break;
                 }
             }
-
         }
-
-
         return result;
     }
 
+    /**
+     * this method checks if cells around the ship is placed correctly
+     * @param area on which we need to make a check
+     * @param ship around which we need to make a check
+     * @return boolean result value of checking
+     */
     boolean checkNeighbor(Area area, Ship ship) {
         area = ringAreaWithEmpty(area);
         switch (ship.getHealth()) {
@@ -262,9 +275,7 @@ public enum  Checker {
 
     }
 
-
-
-    Area ringAreaWithEmpty(Area area) {
+    private Area ringAreaWithEmpty(Area area) {
         Area resultArea = new Area(area.length() + 2, area.width() + 2);
         insertSmallerArea(resultArea, 1, 1, area);
         return resultArea;
@@ -282,6 +293,11 @@ public enum  Checker {
         }
     }
 
+    /**
+     * method to check total quantity of ships on area and quantity of each type of ships
+     * @param area on which checking should be made
+     * @return true if quantity and types of ships are correct according to game rules
+     */
     boolean checkShips(Area area) {
         int counterOneCellShip = ONE_CELLS_SHIPS_AMOUNT;
         int counterTwoCellShip = TWO_CELLS_SHIPS_AMOUNT;
@@ -306,6 +322,12 @@ public enum  Checker {
         return counterFourCellShip == 0 && counterThreeCellShip == 0 && counterTwoCellShip == 0 && counterOneCellShip == 0;
     }
 
+    /**
+     * checks if ship is killed or alive
+     * @param area on which checking should be made
+     * @param shipNumber int parameter, the number of the ship in array of ships on the area
+     * @return true if ship is not killed
+     */
     public boolean isShipAlive(Area area, int shipNumber) {
         Ship[] shipsGroup = area.getShips();
         return area.getCell(shipsGroup[shipNumber].getRow()[0], shipsGroup[shipNumber].getColumn()[0]) != Area.CellsType.KILLED;

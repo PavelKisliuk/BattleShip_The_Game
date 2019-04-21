@@ -5,6 +5,9 @@ import com.github.PavelKisliuk.model.data.Ship;
 import com.github.PavelKisliuk.util.AreaArranger;
 import org.apache.log4j.Logger;
 
+/**
+ * Abstract model of the game
+ */
 public abstract class AbstractGame {
 
     private static final Logger logger;
@@ -19,6 +22,13 @@ public abstract class AbstractGame {
 
     public abstract boolean opponentGo(Area area);
 
+    /**
+     * implementation of player's move
+     * @param area the field on which we need to make a move
+     * @param row "Y" coordinate of move
+     * @param column "X" coordinate of move
+     * @return true if player's shoot(move) was accurate and there is BEATEN cell on area
+     */
     public boolean playerGo(Area area, int row, int column) {
         boolean result = false;
         AreaArranger arranger = AreaArranger.INSTANCE;
@@ -57,6 +67,11 @@ public abstract class AbstractGame {
         return result;
     }
 
+    /**
+     * method to check if any of the ships is alive, implements main logical target of the game
+     * @param area on which we need to make a check
+     * @return boolean value if player win in this game or not
+     */
     public boolean isWin(Area area) {
         int counterKilled = 20;
 
@@ -70,6 +85,12 @@ public abstract class AbstractGame {
         return counterKilled == 0;
     }
 
+    /**
+     * player's shoot logic implementation
+     * @param area to shoot
+     * @param i coordinate of shoot
+     * @param j second coordinate of shoot
+     */
     private void shoot(Area area, int i, int j) {
         if (area.getCell(i, j) == Area.CellsType.EMPTY) {
             logger.debug("shoot in cell (" + i + ", " + j + ") LAST_MISSED");

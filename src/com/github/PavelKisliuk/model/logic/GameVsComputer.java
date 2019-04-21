@@ -7,12 +7,14 @@ import com.github.PavelKisliuk.util.saveload.GameLoader;
 import com.github.PavelKisliuk.util.saveload.GameSaver;
 import org.apache.log4j.Logger;
 
-import java.io.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * implementation of game logic when second player is computer
+ */
 public class GameVsComputer extends AbstractGame implements SaveAndLoad {
 
     private static final Logger logger;
@@ -40,6 +42,11 @@ public class GameVsComputer extends AbstractGame implements SaveAndLoad {
         return r.nextBoolean();
     }
 
+    /**
+     * computer randomly choose a cell from list to make a shoot
+     * @param area to shoot
+     * @return true if move was made
+     */
     @Override
     public boolean opponentGo(Area area) {
         Random random = new SecureRandom();
@@ -51,7 +58,11 @@ public class GameVsComputer extends AbstractGame implements SaveAndLoad {
         return playerGo(area, randomCell.getI(), randomCell.getJ());
     }
 
-
+    /**
+     * computer logic to choose the cell for next move
+     * @param area field to analise
+     * @return list of cells for next move
+     */
     private List<Cell> scan(Area area) {
         List<Cell> cellsList = new ArrayList<>();
         List<Cell> huntinglist = new ArrayList<>();
@@ -152,56 +163,32 @@ public class GameVsComputer extends AbstractGame implements SaveAndLoad {
         return cellsList;
     }
 
+    /**
+     * method to load the game from File
+     * @param path of file
+     * @param playerArea to load
+     * @param opponentArea to load
+     * @return true if game load
+     */
     @Override
     public boolean loadGame(String path, Area playerArea, Area opponentArea) {
 
-        try {
-            FileInputStream fis = new FileInputStream(path);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-
-
-            playerArea.copy((Area) ois.readObject());
-            logger.debug("Player area \n" + playerArea + " loaded");
-            opponentArea.copy((Area) ois.readObject());
-            logger.debug("Opponent area \n" + opponentArea + " loaded");
-
-            ois.close();
-            fis.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-//        playerArea.copy(gameLoader.loadPlayerArea(path));
-//        opponentArea.copy(gameLoader.loadOpponentArea(path));
+        playerArea.copy(gameLoader.loadPlayerArea(path));
+        opponentArea.copy(gameLoader.loadOpponentArea(path));
         return true;
     }
 
+    /**
+     * method to save the game to File
+     * @param path of file
+     * @param playerArea to save
+     * @param opponentArea to save
+     * @return true if game saved
+     */
     @Override
     public boolean saveGame(String path, Area playerArea, Area opponentArea) {
 
-        try {
-            FileOutputStream fos = new FileOutputStream(path);
-            ObjectOutputStream ois = new ObjectOutputStream(fos);
-
-            ois.writeObject(playerArea);
-            logger.debug("Player area \n" + playerArea + " saved");
-            ois.writeObject(opponentArea);
-            logger.debug("Opponent area \n" + opponentArea + " saved");
-
-
-            ois.close();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-//        gameSaver.saveGame(path, playerArea, opponentArea);
+        gameSaver.saveGame(path, playerArea, opponentArea);
         return true;
     }
 }

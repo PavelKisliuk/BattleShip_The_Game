@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * class creating playing objects
+ * implements pattern singleton
+ * this class contains methods to create default {@link Ship} and {@link Area}
  * @author dzmitryplatonov on 2019-04-06.
  * @version 0.0.1
  */

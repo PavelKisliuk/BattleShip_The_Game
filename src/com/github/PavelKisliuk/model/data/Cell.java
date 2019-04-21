@@ -3,6 +3,7 @@ package com.github.PavelKisliuk.model.data;
 import java.util.Objects;
 
 /**
+ * this class contains cell's coordinates and type on playing field
  * @author dzmitryplatonov on 2019-04-11.
  * @version 0.0.1
  */
