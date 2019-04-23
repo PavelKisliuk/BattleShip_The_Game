@@ -3,11 +3,9 @@ package com.github.PavelKisliuk.util.saveload;
 import com.github.PavelKisliuk.model.data.Area;
 import org.apache.log4j.Logger;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
+import java.io.ObjectOutputStream;
 
 /**
  * @author dzmitryplatonov on 2019-04-14.
@@ -24,17 +22,12 @@ public class GameSaver {
 
     public void saveGame(String path, Area playerArea, Area opponentArea) {
 
-
-        try {
-            Files.write(Paths.get(path), playerArea.toString().getBytes());
-            Files.write(Paths.get(path), Arrays.toString(playerArea.getShips()).getBytes(), StandardOpenOption.APPEND);
-            Files.write(Paths.get(path), "\n".getBytes(), StandardOpenOption.APPEND);
-            Files.write(Paths.get(path), opponentArea.toString().getBytes(), StandardOpenOption.APPEND);
-            Files.write(Paths.get(path), Arrays.toString(opponentArea.getShips()).getBytes(), StandardOpenOption.APPEND);
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))) {
+            oos.writeObject(playerArea);
+            oos.writeObject(opponentArea);
+        } catch (IOException e) {
             logger.debug(playerArea + " and " + opponentArea + " saved successfully");
-        } catch (IOException ex) {
-            logger.info(ex.getMessage());
-            ex.printStackTrace();
+            e.printStackTrace();
         }
     }
 }
