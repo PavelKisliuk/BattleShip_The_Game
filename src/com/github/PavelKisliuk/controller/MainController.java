@@ -134,6 +134,7 @@ public class MainController {
 				if(game instanceof GameVsPlayer) {
 					progressTimeline.stop();
 					timeoutProgressBar.setVisible(false);
+					//((GameVsPlayer) game).disconnect();
 				}
 				//---------------------------------------------------------------
 				goesInfoLabel.setText("You won!!!");
@@ -368,6 +369,7 @@ public class MainController {
 					if(game instanceof GameVsPlayer) {
 						progressTimeline.stop();
 						timeoutProgressBar.setVisible(false);
+						//((GameVsPlayer) game).disconnect();
 					}
 					//---------------------------------------------------------------
 					redisplay(playerGridPane, playerArea);
@@ -531,12 +533,14 @@ public class MainController {
 	}
 
 	private void setWindowElementsOnNewGameButton() {
+		if(game instanceof GameVsComputer) {
+			goFirstCheckBox.setVisible(true);
+		}
 		opponentGridPane.setGridLinesVisible(false);
 		playerGridPane.setGridLinesVisible(false);
 		opponentGridPane.setDisable(true);
 		startButton.setVisible(true);
 		startButton.setDisable(false);
-		goFirstCheckBox.setVisible(true);
 		newGameButton.setVisible(false);
 		rightVBox.setVisible(false);
 		goesInfoLabel.setText(null);
@@ -615,6 +619,7 @@ public class MainController {
 			gameSpeedSlider.setVisible(true);
 			timeoutProgressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
 			timeoutProgressBar.lookup(".bar").setStyle("-fx-accent: #1085BF;");
+			anotherGameTypeMenuItem.setText("Choice game vsPlayer");
 		} else {
 			startButton.setDisable(false);
 			loadMenuItem.setDisable(true);
@@ -625,6 +630,7 @@ public class MainController {
 			gameSpeedSlider.setVisible(false);
 			timeoutProgressBar.setProgress(0);
 			gameSpeedSlider.setValue(gameSpeedSlider.getMax());
+			this.anotherGameTypeMenuItem.setText("Choice game vsComputer");
 
 			if (((GameVsPlayer) game).connect()) {
 				gameInfoLabel.setText("Connected. Click start to play.");

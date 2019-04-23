@@ -27,6 +27,16 @@ public class GameVsPlayer extends AbstractGame {
 		return true;
 	}
 
+	public void disconnect(){
+		try {
+			input.close();
+			output.close();
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void sendArea(Area area) {
 		try {
 			output.writeObject(area);
@@ -64,6 +74,11 @@ public class GameVsPlayer extends AbstractGame {
 			output.writeObject(column);
 			if(super.playerGo(area, row, column)) {
 				output.writeObject(Boolean.TRUE);
+				if(super.isWin(area)) {
+					output.writeObject(Boolean.TRUE);
+				} else {
+					output.writeObject(Boolean.FALSE);
+				}
 				return true;
 			} else {
 				output.writeObject(Boolean.FALSE);
