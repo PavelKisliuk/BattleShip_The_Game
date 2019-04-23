@@ -96,12 +96,7 @@ public class GameVsPlayer extends AbstractGame {
 		try {
 			row = (Integer) input.readObject();
 			column = (Integer) input.readObject();
-			if(super.playerGo(area, row, column)) {
-				output.writeObject(Boolean.TRUE);
-				return true;
-			} else {
-				output.writeObject(Boolean.FALSE);
-			}
+			return super.playerGo(area, row, column);
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
