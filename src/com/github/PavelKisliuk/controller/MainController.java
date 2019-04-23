@@ -282,7 +282,7 @@ public class MainController {
 	}
 
 	private void waitArea() {
-			opponentArea = game.getOpponentArea();
+		opponentArea = game.getOpponentArea();
 
 		Platform.runLater(() -> {
 			gameInfoLabel.setText(String.format("%s%s", ASWController.getArrangementInfo(), " Game start!"));
@@ -438,7 +438,7 @@ public class MainController {
 			progressTimeline = new Timeline(new KeyFrame(Duration.millis(30),
 					timelineEvent ->
 							timeoutProgressBar.setProgress(timeoutProgressBar.getProgress() + 0.001)));
-			progressTimeline.setCycleCount(1000);
+			progressTimeline.setCycleCount(100000);
 			progressTimeline.setOnFinished(evt -> Platform.runLater(() -> this.onTimeOut(color)));
 			progressTimeline.play();
 		}
