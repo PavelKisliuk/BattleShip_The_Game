@@ -20,7 +20,7 @@ public class Area implements Serializable {
     /**
      * enum of cell types
      */
-    public enum CellsType {
+    public enum CellsType implements Serializable{
         EMPTY, SHIP, NEIGHBOR, BEATEN, MISS, KILLED, LAST
     }
 
