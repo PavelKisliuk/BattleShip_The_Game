@@ -13,7 +13,7 @@ public class GameVsPlayer extends AbstractGame {
 	private ObjectOutputStream output;
 
 	public boolean connect() {
-		String hostName = "46.216.22.140";
+		String hostName = "127.0.0.1";
 		int port = 2101;
 
 		try {

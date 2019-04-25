@@ -117,6 +117,7 @@ public class AddShipsWindowController {
 	void initialize() {
 		shipsGroup = new Ship[Area.SHIPS_AMOUNT];
 		isCancel = true;
+		arrangementInfo = "Ships not arrange! ";
 		//---------------------------------------------------------------
 		automaticArrangementButton.setOnAction(this::automaticArrangementButtonOnAction);
 		addShipButton.setOnAction(actionEvent -> addShipButtonOnAction());
@@ -131,14 +132,14 @@ public class AddShipsWindowController {
 		//---------------------------------------------------------------
 		if (RandomAreaArranger.INSTANCE.arrangeRandomArea(area)) {
 			isCancel = false;
-			arrangementInfo = "Arrangement successful.";
+			arrangementInfo = "Arrangement successful. ";
 			AreaArranger.INSTANCE.changeCelltype(area, Area.CellsType.NEIGHBOR, Area.CellsType.EMPTY);
 			//---------------------------------------------------------------
 			Node b = (Node) actionEvent.getTarget();
 			Stage stage = (Stage) b.getScene().getWindow();
 			stage.close();
 		} else {
-			arrangementInfo = "WARNING! Arrangement was failed!!!";
+			arrangementInfo = "WARNING! Arrangement was failed!!! ";
 			//---------------------------------------------------------------
 			Node b = (Node) actionEvent.getTarget();
 			Stage stage = (Stage) b.getScene().getWindow();
