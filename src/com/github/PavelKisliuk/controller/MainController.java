@@ -59,6 +59,7 @@ public class MainController {
 	private Area opponentArea;
 	private boolean isGameGo;
 	private Timeline progressTimeline;
+	private Timeline timeline;
 
 	@FXML
 	private BorderPane mainBorderPane;
@@ -304,6 +305,7 @@ public class MainController {
 			if (game instanceof GameVsPlayer) {
 				((GameVsPlayer) game).sendArea(playerArea);
 				gameInfoLabel.setText("Wait opponent.  ");
+				startButton.setDisable(true);
 			}
 			//------------------------------------------------------------------
 			setShipsOnPlayerArea();
@@ -638,16 +640,19 @@ public class MainController {
 	}
 
 	private void setTimeline() {
-		Timeline timeline = new Timeline();
-		Timeline finalTimeline = timeline;
+		if (timeline != null) {
+			timeline.stop();
+		}
+		timeline = new Timeline();
+		int duration = 500;
 		switch (gameInfoLabel.getText()) {
 			case "Connecting with server.  ":
-				timeline = new Timeline(new KeyFrame(Duration.millis(500),
-						timelineEvent -> setTextOnConnection(finalTimeline)));
+				timeline = new Timeline(new KeyFrame(Duration.millis(duration),
+						timelineEvent -> setTextOnConnection()));
 				break;
 			case "Wait opponent.  ":
-				timeline = new Timeline(new KeyFrame(Duration.millis(500),
-						timelineEvent -> setTextOnWaitOpponent(finalTimeline)));
+				timeline = new Timeline(new KeyFrame(Duration.millis(duration),
+						timelineEvent -> setTextOnWaitOpponent()));
 				break;
 		}
 
@@ -655,7 +660,7 @@ public class MainController {
 		timeline.play();
 	}
 
-	private void setTextOnWaitOpponent(Timeline timeline) {
+	private void setTextOnWaitOpponent() {
 		switch (gameInfoLabel.getText()) {
 			case "Wait opponent.  ":
 				gameInfoLabel.setText("Wait opponent.. ");
@@ -668,11 +673,12 @@ public class MainController {
 				break;
 			default:
 				timeline.stop();
+				startButton.setDisable(false);
 				break;
 		}
 	}
 
-	private void setTextOnConnection(Timeline timeline) {
+	private void setTextOnConnection() {
 		switch (gameInfoLabel.getText()) {
 			case "Connecting with server.  ":
 				gameInfoLabel.setText("Connecting with server.. ");
